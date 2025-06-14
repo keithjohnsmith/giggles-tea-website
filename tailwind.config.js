@@ -7,7 +7,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        // You can add your custom colors here
+        'dark-blue': '#1A213E',
+        // You can add more custom colors here
       },
       fontFamily: {
         // You can add your custom fonts here

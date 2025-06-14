@@ -1,0 +1,667 @@
+[{
+  "_id": {
+    "$oid": "684aa378e893eaf606a3359d"
+  },
+  "category": "Tea Bag Mixbox",
+  "product_name": "No 1 Fruit & Classic",
+  "description": "A delightful mix of fruity and classic tea bags, perfect for discovering new favorites. Enjoy a diverse range of flavors in one convenient box.",
+  "price": 23.5,
+  "image_1": "./assets/1704.jpg",
+  "image_2": "./assets/1704_1706_1710.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a3359e"
+  },
+  "category": "Tea Bag Mixbox",
+  "product_name": "No 2 Fruit & Exotic",
+  "description": "Explore a world of vibrant and unusual flavors with this mix of fruit and exotic tea bags. An adventurous blend for the curious palate.",
+  "price": 18.75,
+  "image_1": "./assets/1705.jpg",
+  "image_2": "./assets/1705_2.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a3359f"
+  },
+  "category": "Tea Bag Mixbox",
+  "product_name": "No 3 Herbal & Fruit",
+  "description": "A soothing collection of herbal and fruit-infused tea bags designed for relaxation and enjoyment. Perfect for any time of day.",
+  "price": 31.25,
+  "image_1": "./assets/1706.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335a0"
+  },
+  "category": "Tea Bag Mixbox",
+  "product_name": "No 4 Green & Fresh",
+  "description": "Rejuvenate your senses with this crisp and clean selection of green and fresh tea bags. Ideal for a refreshing start to your day or a midday lift.",
+  "price": 15.99,
+  "image_1": "./assets/1707.jpg",
+  "image_2": "./assets/1707_1711_1705.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335a1"
+  },
+  "category": "Tea Bag Mixbox",
+  "product_name": "No 5 Black & Beauties",
+  "description": "Indulge in the rich and robust flavors of this exquisite black tea mixbox. A collection of beautiful and bold black teas for connoisseurs.",
+  "price": 28,
+  "image_1": "./assets/1708.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335a2"
+  },
+  "category": "Tea Bag Mixbox",
+  "product_name": "No 6 Black & Pure",
+  "description": "Experience the unadulterated essence of pure black tea with this refined selection. Simple yet profoundly satisfying.",
+  "price": 12.5,
+  "image_1": "/src/assets/1710.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335a3"
+  },
+  "category": "Tea Bag Mixbox",
+  "product_name": "No 7 Pure & Clear",
+  "description": "A gentle and clarifying blend of teas, perfect for a moment of calm and introspection. Enjoy the clarity in every sip.",
+  "price": 20.1,
+  "image_1": "./assets/1711.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335a4"
+  },
+  "category": "Tea Bag Mixbox",
+  "product_name": "No 8 Best of Xmas",
+  "description": "Celebrate the festive season with this special Christmas tea mixbox. A blend of heartwarming flavors to bring joy.",
+  "price": 34,
+  "image_1": "./assets/1712_1.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335a5"
+  },
+  "category": "Green Tea",
+  "product_name": "Japan Sencha Fukujyu",
+  "description": "Experience the authentic taste of Japan with this premium Sencha Fukujyu green tea. Known for its rich umami and vibrant color.",
+  "price": 27.5,
+  "image_1": "./assets/21042.jpg",
+  "image_2": "./assets/21042-g50.jpg",
+  "image_3": "./assets/21042-g150.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335a6"
+  },
+  "category": "Green Tea",
+  "product_name": "Sencha Lemon",
+  "description": "A refreshing twist on classic Sencha, infused with bright lemon notes. Perfect for a zesty and invigorating tea experience.",
+  "price": 14.25,
+  "image_1": "./assets/21043.jpg",
+  "image_2": "./assets/21043-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335a7"
+  },
+  "category": "Green Tea",
+  "product_name": "Green Menthos",
+  "description": "A cool and crisp green tea with a hint of invigorating menthol. Ideal for clearing your mind and refreshing your palate.",
+  "price": 19.8,
+  "image_1": "./assets/21280.jpg",
+  "image_2": "./assets/21280-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335a8"
+  },
+  "category": "Green Tea",
+  "product_name": "Angels Kiss Green & White Blend",
+  "description": "A heavenly blend of delicate green and white teas, offering a subtle sweetness and smooth finish. A truly angelic cup.",
+  "price": 32,
+  "image_1": "./assets/21044.jpg",
+  "image_2": "./assets/21044-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335a9"
+  },
+  "category": "Green Tea",
+  "product_name": "Sencha Sakura",
+  "description": "Savor the ephemeral beauty of cherry blossoms with this exquisite Sencha Sakura. Aromatic and delicate, a true taste of spring.",
+  "price": 26.1,
+  "image_1": "./assets/21284.jpg",
+  "image_2": "./assets/21284-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335aa"
+  },
+  "category": "Green Tea",
+  "product_name": "China Jasmine Tea",
+  "description": "Delight in the fragrant embrace of traditional China Jasmine Tea. Hand-scented with fresh jasmine blossoms for a truly aromatic experience.",
+  "price": 17.5,
+  "image_1": "./assets/21066.jpg",
+  "image_2": "./assets/21066-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335ab"
+  },
+  "category": "Green Tea",
+  "product_name": "Temple of Heaven",
+  "description": "A classic gunpowder green tea, tightly rolled into pellets that unfurl to release a bold and earthy flavor. A venerable tea for contemplation.",
+  "price": 22,
+  "image_1": "./assets/21282.jpg",
+  "image_2": "./assets/21282-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335ac"
+  },
+  "category": "Black Tea",
+  "product_name": "Vanilla",
+  "description": "A comforting black tea infused with the sweet, creamy notes of vanilla. A warm and inviting brew for any time of day.",
+  "price": 16,
+  "image_1": "./assets/21046.jpg",
+  "image_2": "./assets/21046-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335ad"
+  },
+  "category": "Black Tea",
+  "product_name": "Earl Grey",
+  "description": "The timeless classic, Earl Grey, a robust black tea delicately flavored with bergamot oil. Elegant and aromatic.",
+  "price": 11.5,
+  "image_1": "./assets/21063.jpg",
+  "image_2": "./assets/21063-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335ae"
+  },
+  "category": "Black Tea",
+  "product_name": "Assam FTGFOP1 Mokalbari",
+  "description": "A prime example of a top-quality Assam tea from the Mokalbari estate. Known for its strong, malty flavor and bright liquor.",
+  "price": 30,
+  "image_1": "./assets/21065.jpg",
+  "image_2": "./assets/21065-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335af"
+  },
+  "category": "Black Tea",
+  "product_name": "East Frisian Leaf Blend",
+  "description": "A traditional East Frisian blend, perfect for a strong and heartwarming cup. Best enjoyed with rock sugar and cream.",
+  "price": 24.99,
+  "image_1": "./assets/21175.jpg",
+  "image_2": "./assets/21175-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335b0"
+  },
+  "category": "Black Tea",
+  "product_name": "Ceylon OP Highgrown",
+  "description": "A high-grown Ceylon Orange Pekoe, offering a bright, brisk, and refreshing cup. Perfect for those who enjoy a lively black tea.",
+  "price": 19.2,
+  "image_1": "./assets/21195.jpg",
+  "image_2": "./assets/21195-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335b1"
+  },
+  "category": "Black Tea",
+  "product_name": "Margarets hope",
+  "description": "From the renowned Darjeeling estate, Margaret's Hope offers a delicate and floral black tea with muscatel notes. A truly exquisite experience.",
+  "price": 33.75,
+  "image_1": "./assets/21040.jpg",
+  "image_2": "./assets/21040_MargaretsHope.jpg",
+  "image_3": "./assets/21040-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335b2"
+  },
+  "category": "Black Tea",
+  "product_name": "English Breakfast",
+  "description": "The quintessential morning brew, English Breakfast is a robust and full-bodied black tea blend, perfect with milk and sugar.",
+  "price": 10.5,
+  "image_1": "./assets/21041.jpg",
+  "image_2": "./assets/21041-g50.jpg",
+  "image_3": "./assets/21041-g150.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335b3"
+  },
+  "category": "Black Tea Blend",
+  "product_name": "Orange Cookies",
+  "description": "A wonderfully aromatic black tea blend reminiscent of fresh orange cookies. Sweet, citrusy, and comforting.",
+  "price": 21,
+  "image_1": "./assets/21170.jpg",
+  "image_2": "./assets/21170-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335b4"
+  },
+  "category": "Black Tea Blend",
+  "product_name": "East Frisian Sunday Tea",
+  "description": "A special blend of black teas, traditionally enjoyed on Sundays in East Frisia. Rich, smooth, and perfect for a leisurely afternoon.",
+  "price": 25.5,
+  "image_1": "./assets/21174.jpg",
+  "image_2": "./assets/21174-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335b5"
+  },
+  "category": "Black Tea Blend",
+  "product_name": "The Emperor’s 7 treasures",
+  "description": "Discover a treasure trove of flavors in this exquisite black tea blend, said to contain seven precious ingredients fit for an emperor.",
+  "price": 29.75,
+  "image_1": "./assets/21045.jpg",
+  "image_2": "./assets/21045-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335b6"
+  },
+  "category": "Rooibos Tea",
+  "product_name": "Bush Fire",
+  "description": "A vibrant and robust rooibos tea, named for its fiery red hue and warm, earthy taste. Naturally caffeine-free.",
+  "price": 13,
+  "image_1": "./assets/21047.jpg",
+  "image_2": "./assets/21047-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335b7"
+  },
+  "category": "Rooibos Tea",
+  "product_name": "Windhuk Vanilla",
+  "description": "A sweet and comforting rooibos tea from Windhoek, Namibia, infused with the delightful aroma of vanilla. A perfect evening drink.",
+  "price": 17,
+  "image_1": "./assets/21164.jpg",
+  "image_2": "./assets/21164-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335b8"
+  },
+  "category": "Rooibos Tea",
+  "product_name": "Gingerbread Buiscuit Orange",
+  "description": "Cozy up with this festive rooibos blend, featuring the warm spices of gingerbread and a hint of sweet orange. Tastes just like a treat!",
+  "price": 20.5,
+  "image_1": "./assets/21167.jpg",
+  "image_2": "./assets/21167-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335b9"
+  },
+  "category": "Rooibos Tea",
+  "product_name": "Blend Sweet Sin",
+  "description": "Indulge your sweet tooth with this guilt-free rooibos blend, a delightful combination of sweet flavors that’s truly irresistible.",
+  "price": 24,
+  "image_1": "./assets/21172.jpg",
+  "image_2": "./assets/21172-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335ba"
+  },
+  "category": "Rooibos Tea",
+  "product_name": "Karamell",
+  "description": "A rich and creamy rooibos tea with the decadent taste of caramel. A delightful, comforting beverage.",
+  "price": 10.99,
+  "image_1": "./assets/21232.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335bb"
+  },
+  "category": "Fruit Tea Blend",
+  "product_name": "Grandma’s Garden",
+  "description": "A nostalgic fruit tea blend reminiscent of fresh berries and blooming flowers from Grandma's own garden. Sweet and comforting.",
+  "price": 14.5,
+  "image_1": "./assets/21048.jpg",
+  "image_2": "./assets/21048-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335bc"
+  },
+  "category": "Fruit Tea Blend",
+  "product_name": "Fair Almond",
+  "description": "A delightful fruit tea blend with the sweet, nutty notes of almond. A smooth and aromatic infusion.",
+  "price": 18,
+  "image_1": "./assets/21049.jpg",
+  "image_2": "./assets/21049-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335bd"
+  },
+  "category": "Fruit Tea Blend",
+  "product_name": "Mango N’ Friends",
+  "description": "A tropical paradise in a cup! This fruit tea blend is bursting with juicy mango and a medley of friendly fruit flavors.",
+  "price": 22,
+  "image_1": "./assets/21050.jpg",
+  "image_2": "./assets/21050-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335be"
+  },
+  "category": "Fruit Tea Blend",
+  "product_name": "Sea Buckthorn",
+  "description": "Experience the vibrant and tangy taste of sea buckthorn in this invigorating fruit tea blend. Rich in flavor and goodness.",
+  "price": 27,
+  "image_1": "./assets/21168.jpg",
+  "image_2": "./assets/21168-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335bf"
+  },
+  "category": "Fruit Tea Blend",
+  "product_name": "Rhubarb Spritzer",
+  "description": "A refreshing and zesty fruit tea blend with the delightful tartness of rhubarb, perfect for a spritzy, invigorating drink.",
+  "price": 16.5,
+  "image_1": "./assets/21169.jpg",
+  "image_2": "./assets/21169-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335c0"
+  },
+  "category": "Fruit Tea Blend",
+  "product_name": "Turkish Apple Jogurt Lime",
+  "description": "An exotic and creamy fruit tea blend combining the sweetness of Turkish apple with the tang of yogurt and lime. A unique taste adventure.",
+  "price": 20,
+  "image_1": "./assets/21166.jpg",
+  "image_2": "./assets/21166-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335c1"
+  },
+  "category": "Fruit Tea Blend",
+  "product_name": "Advent",
+  "description": "A heartwarming fruit tea blend perfect for the Advent season, filled with festive spices and cozy flavors.",
+  "price": 31,
+  "image_1": "./assets/21281.jpg",
+  "image_2": "./assets/21281-g50-Rauschen_aus.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335c2"
+  },
+  "category": "Fruit Tea Blend",
+  "product_name": "Cloud Catcher",
+  "description": "Drift away with this ethereal fruit tea blend, light and airy with a dreamy combination of fruity notes. Like catching clouds in a cup.",
+  "price": 25,
+  "image_1": "./assets/21285.jpg",
+  "image_2": "./assets/21285-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335c3"
+  },
+  "category": "Fruit Tea Blend",
+  "product_name": "Bora Bora",
+  "description": "Transport yourself to a tropical paradise with this vibrant fruit tea blend, bursting with exotic flavors inspired by Bora Bora.",
+  "price": 19.5,
+  "image_1": "./assets/21286.jpg",
+  "image_2": "./assets/21286-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335c4"
+  },
+  "category": "Fruit Tea Blend",
+  "product_name": "Bitter Lemonade",
+  "description": "A surprisingly refreshing fruit tea blend with a zesty, bitter lemon kick. Perfect for a cooling and invigorating drink.",
+  "price": 13.75,
+  "image_1": "./assets/21343.jpg",
+  "image_2": "./assets/21343-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335c5"
+  },
+  "category": "Fruit Tea Blend",
+  "product_name": "Palais Royal",
+  "description": "An elegant fruit tea blend fit for royalty, featuring a sophisticated mix of fruit flavors that evoke grand palaces.",
+  "price": 28.5,
+  "image_1": "./assets/21609_g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335c6"
+  },
+  "category": "Fruit Tea Blend",
+  "product_name": "Old Love",
+  "description": "Rekindle your affection for fruit teas with this comforting and familiar blend, a true 'old love' for your taste buds.",
+  "price": 17.2,
+  "image_1": "./assets/21665.jpg",
+  "image_2": "./assets/21665-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335c7"
+  },
+  "category": "Fruit Tea Blend",
+  "product_name": "Orange Dream",
+  "description": "A creamy and citrusy fruit tea blend that tastes like a dreamsicle. Perfect for a sweet and uplifting moment.",
+  "price": 21.5,
+  "image_1": "./assets/21666.jpg",
+  "image_2": "./assets/21666-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335c8"
+  },
+  "category": "Half Fermented Tea - China",
+  "product_name": "Milky Oolong",
+  "description": "A unique and highly prized half-fermented Oolong from China, known for its distinct milky, creamy aroma and smooth taste.",
+  "price": 35,
+  "image_1": "./assets/21287.jpg",
+  "image_2": "./assets/21287-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335c9"
+  },
+  "category": "Herb Tea Blend",
+  "product_name": "Ginger Fresh Tea",
+  "description": "An invigorating herb tea blend featuring the zesty warmth of ginger. Perfect for a revitalizing boost.",
+  "price": 15,
+  "image_1": "./assets/21051.jpg",
+  "image_2": "./assets/21051-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335ca"
+  },
+  "category": "Herb Tea Blend",
+  "product_name": "Cool Mint",
+  "description": "A refreshing and soothing herb tea blend with crisp peppermint, ideal for unwinding or a cool digestive aid.",
+  "price": 10,
+  "image_1": "./assets/21064.jpg",
+  "image_2": "./assets/21064-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335cb"
+  },
+  "category": "Herb Tea Blend",
+  "product_name": "Orange Grapefruit",
+  "description": "A vibrant and tangy herb tea blend bursting with the citrusy goodness of orange and grapefruit. Refreshing and uplifting.",
+  "price": 12.8,
+  "image_1": "./assets/21159.jpg",
+  "image_2": "./assets/21159-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335cc"
+  },
+  "category": "Herb Tea Blend",
+  "product_name": "Bad Weather Tea",
+  "description": "A comforting and warming herb tea blend designed to chase away the chill of bad weather. A cozy hug in a mug.",
+  "price": 18.25,
+  "image_1": "./assets/21160.jpg",
+  "image_2": "./assets/21160-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335cd"
+  },
+  "category": "Herb Tea Blend",
+  "product_name": "Kapha Tea",
+  "description": "An Ayurvedic-inspired herb tea blend formulated to balance Kapha dosha, offering warmth and invigorating spices.",
+  "price": 26.5,
+  "image_1": "./assets/21589.jpg",
+  "image_2": "./assets/21589-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335ce"
+  },
+  "category": "Herb Tea Blend",
+  "product_name": "Yoga Tea",
+  "description": "A calming and centering herb tea blend, perfect for enhancing your yoga practice or finding a moment of inner peace.",
+  "price": 22.75,
+  "image_1": "./assets/21590.jpg",
+  "image_2": "./assets/21590-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335cf"
+  },
+  "category": "Herb Tea Blend",
+  "product_name": "Fennel Aniseed Cumin",
+  "description": "A classic digestive herb tea blend featuring the harmonious trio of fennel, aniseed, and cumin. Soothing and aromatic.",
+  "price": 16.99,
+  "image_1": "./assets/221610.jpg",
+  "image_2": "./assets/21610_g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335d0"
+  },
+  "category": "Herb Tea Blend",
+  "product_name": "Womans Tea",
+  "description": "A nurturing and supportive herb tea blend specifically crafted for women's well-being. Gentle and balancing.",
+  "price": 20,
+  "image_1": "./assets/21667.jpg",
+  "image_2": "./assets/21667-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335d1"
+  },
+  "category": "Herbal Tea Blend",
+  "product_name": "Vata Tea",
+  "description": "An Ayurvedic blend designed to soothe and balance Vata dosha, offering warmth and grounding properties.",
+  "price": 29,
+  "image_1": "./assets/21587.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335d2"
+  },
+  "category": "Herbal Tea Blend",
+  "product_name": "Pitta Tea",
+  "description": "A cooling and calming Ayurvedic blend created to balance Pitta dosha, perfect for hot days or when you need to chill out.",
+  "price": 24.5,
+  "image_1": "./assets/21588.jpg",
+  "image_2": "./assets/21588-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335d3"
+  },
+  "category": "Herb Tea",
+  "product_name": "Peppermint",
+  "description": "Pure and invigorating peppermint herb tea, known for its refreshing taste and soothing properties. A timeless classic.",
+  "price": 11,
+  "image_1": "./assets/21163.jpg",
+  "image_2": "./assets/21163-g50.jpg",
+  "isActive": true
+},
+{
+  "_id": {
+    "$oid": "684aa378e893eaf606a335d4"
+  },
+  "category": "Herb Tea",
+  "product_name": "Camomile",
+  "description": "Gentle and calming chamomile herb tea, perfect for unwinding after a long day or preparing for a restful night's sleep.",
+  "price": 13.5,
+  "image_1": "./assets/21173.jpg",
+  "image_2": "./assets/21173-g50.jpg",
+  "isActive": true
+}]

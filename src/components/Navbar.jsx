@@ -1,12 +1,20 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 import logo from '../assets/logo_giggles-tea_centre.png';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const { getCartCount } = useCart();
+  const { isAuthenticated, logout } = useAuth();
+
+  const handleLogoutClick = () => {
+    logout();
+    navigate('/');
+  };
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -34,6 +42,15 @@ const Navbar = () => {
             <Link to="/contact" className={`${isActive('/contact')} hover:text-gray-900 px-3 py-2 text-sm font-medium`}>
               Contact
             </Link>
+            {isAuthenticated ? (
+              <Link to="/admin" className="hover:text-gray-900 px-3 py-2 text-sm font-medium">
+                Admin
+              </Link>
+            ) : (
+              <Link to="/login" className="hover:text-gray-900 px-3 py-2 text-sm font-medium">
+                Login
+              </Link>
+            )}
             <Link to="/cart" className={`${isActive('/cart')} hover:text-gray-900 px-3 py-2 text-sm font-medium relative`}>
               <span className="flex items-center">
                 <svg className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -118,6 +135,29 @@ const Navbar = () => {
             >
               Contact
             </Link>
+            {isAuthenticated ? (
+              <>
+                <Link
+                  to="/admin"
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                >
+                  Admin
+                </Link>
+                <button
+                  onClick={handleLogoutClick}
+                  className="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <Link
+                to="/login"
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+              >
+                Login
+              </Link>
+            )}
             <Link
               to="/cart"
               className={`block px-3 py-2 rounded-md text-base font-medium ${isActive('/cart')} hover:text-gray-900 hover:bg-gray-50`}
