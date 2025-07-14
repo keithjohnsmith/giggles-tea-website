@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { api } from '../../services/api';
+import React from 'react';
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);

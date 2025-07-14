@@ -1,5 +1,5 @@
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
 import { OrderProvider } from './context/OrderContext';
@@ -7,7 +7,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import About from './pages/About';
-import Products from './pages/Products';
+import ProductsPage from './pages/ProductsPage';
 import Contact from './pages/Contact';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
@@ -21,6 +21,14 @@ import Customers from './pages/admin/Customers';
 import Users from './pages/admin/Users';
 import Settings from './pages/admin/Settings';
 import ProtectedRoute from './components/ProtectedRoute';
+
+// Only import the API test page in development
+let ApiTestPage = null;
+if (import.meta.env.DEV) {
+  import('./pages/ApiTestPage').then(module => {
+    ApiTestPage = module.default;
+  });
+}
 
 const TitleComponent = () => {
   const location = useLocation();
@@ -103,12 +111,17 @@ function App() {
               }>
                 <Route path="/" element={<Home />} />
                 <Route path="/about" element={<About />} />
-                <Route path="/products" element={<Products />} />
+                <Route path="/products" element={<ProductsPage />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/order-confirmation/:orderId" element={<OrderConfirmation />} />
                 <Route path="/login" element={<Login />} />
+                
+                {/* Only add the API test route in development */}
+                {import.meta.env.DEV && ApiTestPage && (
+                  <Route path="/api-test" element={<ApiTestPage />} />
+                )}
               </Route>
 
               {/* Admin routes with AdminLayout */}

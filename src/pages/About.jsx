@@ -1,7 +1,7 @@
 import React from 'react';
 import teaShop from '../assets/paul-vincent-roll-c61jL_NpAn8-unsplash.webp';
 import about1 from '../assets/about1.jpg';
-import about2 from '../assets/about2.jpg';
+import about2 from '../assets/1707_1711_1705 (2).jpg';
 import { Link } from 'react-router-dom';
 
 const About = () => {

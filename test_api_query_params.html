@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Query Parameters Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1, h2 {
+            color: #4F46E5;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        button {
+            background-color: #4F46E5;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background-color: #4338CA;
+        }
+        .result {
+            margin-top: 20px;
+        }
+        .error {
+            color: red;
+        }
+        .success {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>API Query Parameters Test</h1>
+    
+    <div>
+        <h2>Test API Endpoints with Query Parameters</h2>
+        <button id="testProducts">Test /api/products with Query Parameters</button>
+        <button id="testProductsFixed">Test /api/products_fixed with Query Parameters</button>
+        <button id="testProductsSimple">Test /api/products_simple with Query Parameters</button>
+    </div>
+
+    <div class="result">
+        <h3>Request URL:</h3>
+        <pre id="requestUrl"></pre>
+        
+        <h3>Response Status:</h3>
+        <pre id="responseStatus"></pre>
+        
+        <h3>Response Headers:</h3>
+        <pre id="responseHeaders"></pre>
+        
+        <h3>Response Body:</h3>
+        <pre id="responseBody"></pre>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const baseUrl = 'http://localhost/giggles-tea';
+            
+            async function fetchWithDetails(url) {
+                document.getElementById('requestUrl').textContent = url;
+                
+                try {
+                    const response = await fetch(url);
+                    
+                    // Display status
+                    const statusElement = document.getElementById('responseStatus');
+                    statusElement.textContent = `${response.status} ${response.statusText}`;
+                    statusElement.className = response.ok ? 'success' : 'error';
+                    
+                    // Display headers
+                    const headers = Array.from(response.headers.entries())
+                        .map(([key, value]) => `${key}: ${value}`)
+                        .join('\n');
+                    document.getElementById('responseHeaders').textContent = headers;
+                    
+                    // Clone the response to handle the body
+                    const clonedResponse = response.clone();
+                    
+                    try {
+                        // Try to parse as JSON
+                        const data = await response.json();
+                        document.getElementById('responseBody').textContent = JSON.stringify(data, null, 2);
+                    } catch (jsonError) {
+                        // If not JSON, get as text
+                        const text = await clonedResponse.text();
+                        document.getElementById('responseBody').textContent = text;
+                    }
+                } catch (error) {
+                    document.getElementById('responseStatus').textContent = 'Error: ' + error.message;
+                    document.getElementById('responseStatus').className = 'error';
+                    document.getElementById('responseHeaders').textContent = '';
+                    document.getElementById('responseBody').textContent = error.toString();
+                }
+            }
+            
+            // Test buttons
+            document.getElementById('testProducts').addEventListener('click', () => {
+                fetchWithDetails(`${baseUrl}/api/products?page=1&limit=100&isActive=true`);
+            });
+            
+            document.getElementById('testProductsFixed').addEventListener('click', () => {
+                fetchWithDetails(`${baseUrl}/api/products_fixed?page=1&limit=100&isActive=true`);
+            });
+            
+            document.getElementById('testProductsSimple').addEventListener('click', () => {
+                fetchWithDetails(`${baseUrl}/api/products_simple?page=1&limit=100&isActive=true`);
+            });
+        });
+    </script>
+</body>
+</html>

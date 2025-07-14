@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Featured Products Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #4F46E5;
+        }
+        button {
+            background-color: #4F46E5;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        pre {
+            background-color: #f3f4f6;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Simple Featured Products Test</h1>
+    
+    <div>
+        <button id="testButton">Test Featured Products API</button>
+    </div>
+    
+    <pre id="output">Click the button to test the API</pre>
+    
+    <script>
+        document.getElementById('testButton').addEventListener('click', async () => {
+            const output = document.getElementById('output');
+            output.textContent = 'Testing API...';
+            
+            try {
+                // Test the API with featured=true parameter
+                const response = await fetch('http://localhost/giggles-tea/api/products?featured=true');
+                const text = await response.text();
+                
+                try {
+                    // Try to parse as JSON
+                    const json = JSON.parse(text);
+                    output.textContent = 'API Response:\n' + JSON.stringify(json, null, 2);
+                    
+                    // Check if we got any products
+                    if (json.success && json.data && Array.isArray(json.data)) {
+                        const count = json.data.length;
+                        output.textContent += `\n\nFound ${count} featured products`;
+                    }
+                } catch (e) {
+                    // If not valid JSON, show the raw text
+                    output.textContent = 'Raw Response (not valid JSON):\n' + text;
+                }
+            } catch (error) {
+                output.textContent = 'Error: ' + error.message;
+            }
+        });
+    </script>
+</body>
+</html>

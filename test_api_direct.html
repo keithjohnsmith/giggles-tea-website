@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Direct Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        button {
+            background-color: #4F46E5;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background-color: #4338CA;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        .error {
+            color: #e53e3e;
+            font-weight: bold;
+        }
+        .success {
+            color: #38a169;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>API Direct Test</h1>
+        
+        <div class="card">
+            <h2>Test API Endpoints</h2>
+            <button id="testDirectApi">Test Direct API (/api/products.php)</button>
+            <button id="testRouterApi">Test Router API (/server/api/products)</button>
+            <button id="testSimpleApi">Test Simple API (/api/products_simple.php)</button>
+        </div>
+        
+        <div class="card">
+            <h2>Results</h2>
+            <div id="results">
+                <p>Click a button above to test an API endpoint.</p>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>Raw Response</h2>
+            <pre id="rawResponse">No response yet.</pre>
+        </div>
+        
+        <div class="card">
+            <h2>Parsed Data</h2>
+            <pre id="parsedData">No data yet.</pre>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Test direct API endpoint
+            document.getElementById('testDirectApi').addEventListener('click', function() {
+                testEndpoint('/api/products.php');
+            });
+            
+            // Test router API endpoint
+            document.getElementById('testRouterApi').addEventListener('click', function() {
+                testEndpoint('/server/api/products');
+            });
+            
+            // Test simple API endpoint
+            document.getElementById('testSimpleApi').addEventListener('click', function() {
+                testEndpoint('/api/products_simple.php');
+            });
+            
+            // Function to test an endpoint
+            async function testEndpoint(endpoint) {
+                const resultsDiv = document.getElementById('results');
+                const rawResponsePre = document.getElementById('rawResponse');
+                const parsedDataPre = document.getElementById('parsedData');
+                
+                resultsDiv.innerHTML = `<p>Testing endpoint: ${endpoint}...</p>`;
+                rawResponsePre.textContent = 'Loading...';
+                parsedDataPre.textContent = 'Loading...';
+                
+                try {
+                    // Create full URL
+                    const baseUrl = 'http://localhost/giggles-tea';
+                    const url = `${baseUrl}${endpoint}`;
+                    
+                    console.log(`Fetching from: ${url}`);
+                    resultsDiv.innerHTML += `<p>Fetching from: ${url}</p>`;
+                    
+                    // Make the request
+                    const response = await fetch(url, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        mode: 'cors',
+                        credentials: 'include'
+                    });
+                    
+                    // Get response status and headers
+                    const status = response.status;
+                    const statusText = response.statusText;
+                    const contentType = response.headers.get('content-type');
+                    
+                    // Clone the response for raw text
+                    const responseClone = response.clone();
+                    const rawText = await responseClone.text();
+                    
+                    // Display raw response
+                    rawResponsePre.textContent = `Status: ${status} ${statusText}\nContent-Type: ${contentType}\n\n${rawText}`;
+                    
+                    // Try to parse as JSON
+                    let parsedData;
+                    let success = false;
+                    
+                    try {
+                        if (contentType && contentType.includes('application/json')) {
+                            parsedData = await response.json();
+                            success = true;
+                            parsedDataPre.textContent = JSON.stringify(parsedData, null, 2);
+                        } else {
+                            parsedDataPre.textContent = 'Response is not JSON.';
+                        }
+                    } catch (jsonError) {
+                        console.error('Error parsing JSON:', jsonError);
+                        parsedDataPre.textContent = `Error parsing JSON: ${jsonError.message}\n\nRaw text: ${rawText.substring(0, 500)}${rawText.length > 500 ? '...' : ''}`;
+                    }
+                    
+                    // Update results
+                    if (response.ok && success) {
+                        resultsDiv.innerHTML += `<p class="success">✅ Success! Status: ${status}</p>`;
+                        
+                        // Check if we have products data
+                        if (parsedData && parsedData.success && parsedData.data) {
+                            const products = Array.isArray(parsedData.data) ? parsedData.data : 
+                                            (parsedData.data.data ? parsedData.data.data : []);
+                            
+                            resultsDiv.innerHTML += `<p>Found ${products.length} products.</p>`;
+                            
+                            if (products.length === 0) {
+                                resultsDiv.innerHTML += `<p class="error">⚠️ No products returned!</p>`;
+                            }
+                        } else {
+                            resultsDiv.innerHTML += `<p class="error">⚠️ No products data found in response.</p>`;
+                        }
+                    } else {
+                        resultsDiv.innerHTML += `<p class="error">❌ Error! Status: ${status} ${statusText}</p>`;
+                    }
+                    
+                } catch (error) {
+                    console.error('Fetch error:', error);
+                    resultsDiv.innerHTML += `<p class="error">❌ Fetch error: ${error.message}</p>`;
+                    rawResponsePre.textContent = `Error: ${error.message}`;
+                    parsedDataPre.textContent = 'No data due to error.';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

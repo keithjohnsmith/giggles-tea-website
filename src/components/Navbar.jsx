@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import logo from '../assets/logo_giggles-tea_centre.png';
+import React from 'react';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);

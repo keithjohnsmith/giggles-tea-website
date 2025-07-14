@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final CORS Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 10px 0;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Final CORS Test</h1>
+    <p>This page tests if all CORS issues have been resolved.</p>
+    
+    <div class="test-section">
+        <h2>1. Test Direct API Access (with query parameters)</h2>
+        <button id="testDirectApi">Test Direct API</button>
+        <pre id="directApiResults">Click the button to run the test...</pre>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. Test Router API Access (with query parameters)</h2>
+        <button id="testRouterApi">Test Router API</button>
+        <pre id="routerApiResults">Click the button to run the test...</pre>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. Test Response Headers</h2>
+        <button id="testHeaders">Test Headers</button>
+        <pre id="headersResults">Click the button to run the test...</pre>
+    </div>
+    
+    <script>
+        // Test direct API access with query parameters
+        document.getElementById('testDirectApi').addEventListener('click', async () => {
+            const resultsElement = document.getElementById('directApiResults');
+            resultsElement.innerHTML = 'Testing direct API access...';
+            
+            try {
+                const response = await fetch('http://localhost/giggles-tea/api/products.php?page=1&limit=10&isActive=true', {
+                    method: 'GET'
+                });
+                
+                const headers = {};
+                for (const [key, value] of response.headers.entries()) {
+                    headers[key] = value;
+                }
+                
+                const data = await response.json();
+                
+                resultsElement.innerHTML = `
+<span class="success">✓ Success! Direct API access working</span>
+
+Response Status: ${response.status} ${response.statusText}
+
+CORS Headers:
+${JSON.stringify(Object.fromEntries(
+    Object.entries(headers).filter(([key]) => key.toLowerCase().includes('access-control'))
+), null, 2)}
+
+Response Data (truncated):
+${JSON.stringify(data, null, 2).substring(0, 500)}...
+`;
+            } catch (error) {
+                resultsElement.innerHTML = `
+<span class="error">✗ Error: ${error.message}</span>
+
+Check the console for more details.
+`;
+                console.error('Direct API test error:', error);
+            }
+        });
+        
+        // Test router API access with query parameters
+        document.getElementById('testRouterApi').addEventListener('click', async () => {
+            const resultsElement = document.getElementById('routerApiResults');
+            resultsElement.innerHTML = 'Testing router API access...';
+            
+            try {
+                const response = await fetch('http://localhost/giggles-tea/server/api/products?page=1&limit=10&isActive=true', {
+                    method: 'GET'
+                });
+                
+                const headers = {};
+                for (const [key, value] of response.headers.entries()) {
+                    headers[key] = value;
+                }
+                
+                const data = await response.json();
+                
+                resultsElement.innerHTML = `
+<span class="success">✓ Success! Router API access working</span>
+
+Response Status: ${response.status} ${response.statusText}
+
+CORS Headers:
+${JSON.stringify(Object.fromEntries(
+    Object.entries(headers).filter(([key]) => key.toLowerCase().includes('access-control'))
+), null, 2)}
+
+Response Data (truncated):
+${JSON.stringify(data, null, 2).substring(0, 500)}...
+`;
+            } catch (error) {
+                resultsElement.innerHTML = `
+<span class="error">✗ Error: ${error.message}</span>
+
+Check the console for more details.
+`;
+                console.error('Router API test error:', error);
+            }
+        });
+        
+        // Test headers
+        document.getElementById('testHeaders').addEventListener('click', async () => {
+            const resultsElement = document.getElementById('headersResults');
+            resultsElement.innerHTML = 'Testing headers...';
+            
+            try {
+                const response = await fetch('http://localhost/giggles-tea/test_headers.php');
+                
+                const headers = {};
+                for (const [key, value] of response.headers.entries()) {
+                    headers[key] = value;
+                }
+                
+                const data = await response.json();
+                
+                resultsElement.innerHTML = `
+<span class="success">✓ Success! Headers test completed</span>
+
+Response Status: ${response.status} ${response.statusText}
+
+CORS Headers from Browser:
+${JSON.stringify(Object.fromEntries(
+    Object.entries(headers).filter(([key]) => key.toLowerCase().includes('access-control'))
+), null, 2)}
+
+Headers from Server (PHP):
+${JSON.stringify(Object.fromEntries(
+    Object.entries(data.headers || {}).filter(([key]) => key.toLowerCase().includes('access-control'))
+), null, 2)}
+
+All Headers (Raw):
+${JSON.stringify(data.all_headers || [], null, 2)}
+`;
+            } catch (error) {
+                resultsElement.innerHTML = `
+<span class="error">✗ Error: ${error.message}</span>
+
+Check the console for more details.
+`;
+                console.error('Headers test error:', error);
+            }
+        });
+    </script>
+</body>
+</html>

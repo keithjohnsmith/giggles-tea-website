@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import React from 'react';
 
 const statuses = {
   pending: 'bg-yellow-100 text-yellow-800',

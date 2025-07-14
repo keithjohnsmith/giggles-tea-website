@@ -1,6 +1,7 @@
 import { ObjectId } from 'mongodb';
 import BaseModel from './BaseModel';
 import bcrypt from 'bcrypt';
+import React from 'react';
 
 const SALT_ROUNDS = 10;
 

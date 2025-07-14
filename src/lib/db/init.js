@@ -1,5 +1,6 @@
 import { Product, Order, User } from './models';
 import logger from '../../utils/logger';
+import React from 'react';
 
 const isDev = process.env.NODE_ENV === 'development';
 

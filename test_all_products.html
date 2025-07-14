@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test All Products (Active and Inactive)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        button {
+            background-color: #4F46E5;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background-color: #4338CA;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        .error {
+            color: #e53e3e;
+            font-weight: bold;
+        }
+        .success {
+            color: #38a169;
+            font-weight: bold;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .product-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            background-color: white;
+        }
+        .product-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .inactive {
+            opacity: 0.6;
+            border: 2px solid #e53e3e;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+        .active-badge {
+            background-color: #38a169;
+            color: white;
+        }
+        .inactive-badge {
+            background-color: #e53e3e;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Test All Products (Active and Inactive)</h1>
+        
+        <div class="card">
+            <h2>API Configuration</h2>
+            <div>
+                <label for="baseUrl">Base URL:</label>
+                <input type="text" id="baseUrl" value="http://localhost/giggles-tea" style="width: 300px; padding: 5px; margin: 5px 0;">
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>Test Options</h2>
+            <button id="testAllProducts">Get ALL Products (Active and Inactive)</button>
+            <button id="testActiveProducts">Get ONLY Active Products</button>
+            <button id="testInactiveProducts">Get ONLY Inactive Products</button>
+            <div>
+                <label for="apiEndpoint">API Endpoint:</label>
+                <select id="apiEndpoint" style="padding: 5px; margin: 5px 0;">
+                    <option value="/server/api/products">Router API (/server/api/products)</option>
+                    <option value="/api/products.php">Direct API (/api/products.php)</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h3>Request URL</h3>
+            <pre id="requestUrl">No request made yet.</pre>
+        </div>
+        
+        <div class="card">
+            <h3>Results</h3>
+            <div id="results">
+                <p>Click a button above to test.</p>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h3>Products</h3>
+            <div id="productsCount"></div>
+            <div id="productsGrid" class="product-grid">
+                <p>Click a button above to display products.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('testAllProducts').addEventListener('click', function() {
+                fetchProducts('all');
+            });
+            
+            document.getElementById('testActiveProducts').addEventListener('click', function() {
+                fetchProducts('active');
+            });
+            
+            document.getElementById('testInactiveProducts').addEventListener('click', function() {
+                fetchProducts('inactive');
+            });
+            
+            async function fetchProducts(filter) {
+                const resultsDiv = document.getElementById('results');
+                const productsGrid = document.getElementById('productsGrid');
+                const productsCount = document.getElementById('productsCount');
+                const requestUrlPre = document.getElementById('requestUrl');
+                
+                resultsDiv.innerHTML = '<p>Loading...</p>';
+                productsGrid.innerHTML = '<p>Loading products...</p>';
+                productsCount.textContent = '';
+                
+                try {
+                    // Create full URL with appropriate filter
+                    const baseUrl = document.getElementById('baseUrl').value.trim();
+                    const endpoint = document.getElementById('apiEndpoint').value;
+                    let url = `${baseUrl}${endpoint}`;
+                    
+                    // Add the appropriate isActive filter
+                    if (filter === 'active') {
+                        url += '?isActive=true';
+                    } else if (filter === 'inactive') {
+                        url += '?isActive=false';
+                    } else {
+                        // For 'all', we don't add any filter so we get everything
+                    }
+                    
+                    requestUrlPre.textContent = url;
+                    console.log(`Fetching from: ${url}`);
+                    resultsDiv.innerHTML = `<p>Fetching from: ${url}</p>`;
+                    
+                    // Make the request
+                    const response = await fetch(url, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        mode: 'cors',
+                        credentials: 'include'
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const result = await response.json();
+                    
+                    // Extract products from response
+                    let products = [];
+                    if (result && result.status === 'success') {
+                        if (Array.isArray(result.data)) {
+                            products = result.data;
+                        } else if (result.data && Array.isArray(result.data.data)) {
+                            products = result.data.data;
+                        } else if (result.data && result.data.products) {
+                            products = result.data.products;
+                        }
+                    }
+                    
+                    // Update results
+                    resultsDiv.innerHTML = `<p class="success">✅ Success! Status: ${response.status}</p>`;
+                    resultsDiv.innerHTML += `<p>Found ${products.length} products.</p>`;
+                    
+                    // Update count
+                    productsCount.textContent = `Found ${products.length} products`;
+                    
+                    // Display products
+                    if (products.length > 0) {
+                        productsGrid.innerHTML = '';
+                        
+                        products.forEach(product => {
+                            const card = document.createElement('div');
+                            card.className = 'product-card';
+                            if (product.is_active === false || product.is_active === 0) {
+                                card.classList.add('inactive');
+                            }
+                            
+                            // Get image URL
+                            let imageUrl = '';
+                            if (product.image_url) {
+                                imageUrl = product.image_url;
+                            } else if (product.image) {
+                                if (product.image.startsWith('http')) {
+                                    imageUrl = product.image;
+                                } else {
+                                    imageUrl = `${baseUrl}/image.php?path=${encodeURIComponent(product.image)}`;
+                                }
+                            } else {
+                                imageUrl = `${baseUrl}/images/placeholder-product.jpg`;
+                            }
+                            
+                            const statusBadge = product.is_active ? 
+                                '<span class="status-badge active-badge">Active</span>' : 
+                                '<span class="status-badge inactive-badge">Inactive</span>';
+                            
+                            card.innerHTML = `
+                                ${statusBadge}
+                                <img src="${imageUrl}" alt="${product.name}" class="product-image" onerror="this.src='${baseUrl}/images/placeholder-product.jpg'">
+                                <h3>${product.name}</h3>
+                                <p>${product.price ? '$' + parseFloat(product.price).toFixed(2) : 'Price not available'}</p>
+                                <p>${product.category || 'Uncategorized'}</p>
+                            `;
+                            
+                            productsGrid.appendChild(card);
+                        });
+                    } else {
+                        productsGrid.innerHTML = '<p>No products found.</p>';
+                    }
+                    
+                } catch (error) {
+                    console.error('Error loading products:', error);
+                    resultsDiv.innerHTML = `<p class="error">❌ Error loading products: ${error.message}</p>`;
+                    productsGrid.innerHTML = `<p class="error">Error loading products: ${error.message}</p>`;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,8 +1,9 @@
 import paulVincent from '../assets/paul-vincent-roll-c61jL_NpAn8-unsplash.webp'
-import teaCollection from '../assets/DSC00284-removebg-preview.png'
+import teaCollection from '../assets/DuB_1836_Fruit_Teas_Mood_0624.jpg'
 import homeSection from '../assets/home-section.png'
-import ProductsCarousel from '../components/Products'
+import FeaturedProductsCarousel from '../components/FeaturedProductsCarousel'
 import { Link } from 'react-router-dom'
+import React from 'react';
 
 const Home = () => {
   return (
@@ -138,10 +139,8 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Products Carousel Section */}
-      <div className="bg-gray-50">
-        <ProductsCarousel />
-      </div>
+      {/* Featured Products Carousel Section */}
+      <FeaturedProductsCarousel />
     </div>
   );
 };

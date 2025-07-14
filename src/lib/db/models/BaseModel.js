@@ -1,4 +1,5 @@
 import clientPromise from '../connect';
+import React from 'react';
 
 class BaseModel {
   constructor(collectionName) {

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Router CORS Configuration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #4F46E5;
+            margin-bottom: 20px;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4F46E5;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background-color: #4338CA;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Router CORS Configuration</h1>
+    
+    <div class="test-section">
+        <h2>Test GET Products via Router</h2>
+        <button id="testProducts">Test GET Products</button>
+        <div>
+            <p>Status: <span id="productsStatus">Not tested</span></p>
+            <pre id="productsResult">Results will appear here...</pre>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test OPTIONS Request (Preflight)</h2>
+        <button id="testOptions">Test OPTIONS Request</button>
+        <div>
+            <p>Status: <span id="optionsStatus">Not tested</span></p>
+            <pre id="optionsResult">Results will appear here...</pre>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test POST Request</h2>
+        <button id="testPost">Test POST Request</button>
+        <div>
+            <p>Status: <span id="postStatus">Not tested</span></p>
+            <pre id="postResult">Results will appear here...</pre>
+        </div>
+    </div>
+
+    <script>
+        // Base URL for the router
+        const routerBaseUrl = 'http://localhost/giggles-tea/server';
+
+        // Function to display results
+        function displayResult(statusElement, resultElement, success, message, data = null) {
+            statusElement.textContent = success ? 'Success' : 'Error';
+            statusElement.className = success ? 'success' : 'error';
+            
+            let resultText = message + '\n\n';
+            if (data) {
+                resultText += typeof data === 'string' ? data : JSON.stringify(data, null, 2);
+            }
+            
+            resultElement.textContent = resultText;
+        }
+
+        // Test GET Products
+        document.getElementById('testProducts').addEventListener('click', async () => {
+            const statusElement = document.getElementById('productsStatus');
+            const resultElement = document.getElementById('productsResult');
+            
+            try {
+                statusElement.textContent = 'Testing...';
+                const response = await fetch(`${routerBaseUrl}/api/products`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                
+                const data = await response.json();
+                
+                // Get response headers for debugging
+                const headers = {};
+                response.headers.forEach((value, key) => {
+                    headers[key] = value;
+                });
+                
+                displayResult(
+                    statusElement, 
+                    resultElement, 
+                    response.ok, 
+                    `Response Status: ${response.status} ${response.statusText}`, 
+                    { headers, data }
+                );
+            } catch (error) {
+                displayResult(statusElement, resultElement, false, 'Error:', error.toString());
+            }
+        });
+
+        // Test OPTIONS Request
+        document.getElementById('testOptions').addEventListener('click', async () => {
+            const statusElement = document.getElementById('optionsStatus');
+            const resultElement = document.getElementById('optionsResult');
+            
+            try {
+                statusElement.textContent = 'Testing...';
+                
+                // We need to use XMLHttpRequest for more control over OPTIONS requests
+                const xhr = new XMLHttpRequest();
+                xhr.open('OPTIONS', `${routerBaseUrl}/api/products`, true);
+                xhr.withCredentials = true;
+                
+                xhr.onload = function() {
+                    const headers = {};
+                    const rawHeaders = xhr.getAllResponseHeaders().split('\r\n');
+                    rawHeaders.forEach(header => {
+                        if (header) {
+                            const parts = header.split(': ');
+                            headers[parts[0]] = parts[1];
+                        }
+                    });
+                    
+                    displayResult(
+                        statusElement, 
+                        resultElement, 
+                        xhr.status >= 200 && xhr.status < 300, 
+                        `Response Status: ${xhr.status}`, 
+                        { headers }
+                    );
+                };
+                
+                xhr.onerror = function(error) {
+                    displayResult(statusElement, resultElement, false, 'Network Error:', error);
+                };
+                
+                xhr.send();
+            } catch (error) {
+                displayResult(statusElement, resultElement, false, 'Error:', error.toString());
+            }
+        });
+
+        // Test POST Request
+        document.getElementById('testPost').addEventListener('click', async () => {
+            const statusElement = document.getElementById('postStatus');
+            const resultElement = document.getElementById('postResult');
+            
+            try {
+                statusElement.textContent = 'Testing...';
+                const response = await fetch(`${routerBaseUrl}/api/products`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({ test: 'data' })
+                });
+                
+                let data;
+                try {
+                    data = await response.json();
+                } catch (e) {
+                    data = await response.text();
+                }
+                
+                // Get response headers for debugging
+                const headers = {};
+                response.headers.forEach((value, key) => {
+                    headers[key] = value;
+                });
+                
+                displayResult(
+                    statusElement, 
+                    resultElement, 
+                    response.ok, 
+                    `Response Status: ${response.status} ${response.statusText}`, 
+                    { headers, data }
+                );
+            } catch (error) {
+                displayResult(statusElement, resultElement, false, 'Error:', error.toString());
+            }
+        });
+    </script>
+</body>
+</html>

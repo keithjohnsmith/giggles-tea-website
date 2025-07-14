@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Direct Products API Access</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .error {
+            color: red;
+        }
+        .success {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Direct Products API Access</h1>
+    
+    <div>
+        <button id="testOriginal">Test Original Products API</button>
+        <button id="testFixed">Test Fixed Products API</button>
+        <button id="testSimple">Test Simple Products API</button>
+    </div>
+    
+    <h2>Results:</h2>
+    <div id="status"></div>
+    <h3>API Response:</h3>
+    <pre id="output"></pre>
+    
+    <script>
+        document.getElementById('testOriginal').addEventListener('click', () => {
+            testApi('http://localhost/giggles-tea/server/api/products.php', 'Original Products API');
+        });
+        
+        document.getElementById('testFixed').addEventListener('click', () => {
+            testApi('http://localhost/giggles-tea/server/api/products_fixed.php', 'Fixed Products API');
+        });
+        
+        document.getElementById('testSimple').addEventListener('click', () => {
+            testApi('http://localhost/giggles-tea/server/api/products_simple.php', 'Simple Products API');
+        });
+        
+        async function testApi(url, apiName) {
+            const statusEl = document.getElementById('status');
+            const outputEl = document.getElementById('output');
+            
+            statusEl.innerHTML = `<p>Testing ${apiName}...</p>`;
+            outputEl.textContent = '';
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    },
+                    credentials: 'include'
+                });
+                
+                // Clone the response to display headers
+                const responseClone = response.clone();
+                
+                // Display response headers
+                const headers = {};
+                responseClone.headers.forEach((value, key) => {
+                    headers[key] = value;
+                });
+                
+                let result = '';
+                result += `Status: ${response.status} ${response.statusText}\n\n`;
+                result += `Headers:\n${JSON.stringify(headers, null, 2)}\n\n`;
+                
+                try {
+                    const data = await response.json();
+                    result += `Data:\n${JSON.stringify(data, null, 2)}`;
+                    statusEl.innerHTML = `<p class="success">Successfully tested ${apiName}</p>`;
+                } catch (jsonError) {
+                    const text = await responseClone.text();
+                    result += `Raw Response:\n${text}`;
+                    statusEl.innerHTML = `<p class="error">Error parsing JSON from ${apiName}: ${jsonError.message}</p>`;
+                }
+                
+                outputEl.textContent = result;
+            } catch (error) {
+                statusEl.innerHTML = `<p class="error">Error testing ${apiName}: ${error.message}</p>`;
+                outputEl.textContent = `Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>

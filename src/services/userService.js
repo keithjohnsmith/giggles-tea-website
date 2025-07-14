@@ -1,4 +1,5 @@
 import { api } from './api';
+import React from 'react';
 
 export const userService = {
   // Get all users (admin only)

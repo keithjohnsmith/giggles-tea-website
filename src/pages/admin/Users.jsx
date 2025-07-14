@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { userService } from '../../services/api';
 import { FiEdit, FiTrash2, FiUserPlus, FiSave, FiX } from 'react-icons/fi';
+import React from 'react';
 
 export default function AdminUsers() {
   const { user: currentUser } = useAuth();

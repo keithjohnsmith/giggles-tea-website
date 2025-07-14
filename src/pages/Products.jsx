@@ -1,26 +1,54 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { productService } from '../services/api';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import PropTypes from 'prop-types';
+import { FiChevronLeft, FiChevronRight, FiFilter, FiX } from 'react-icons/fi';
+import productService from '../services/productService';
 import ProductsCarousel from '../components/Products';
 import { useCart } from '../context/CartContext';
 import AddToCartNotification from '../components/AddToCartNotification';
-import { FiChevronLeft, FiChevronRight, FiFilter, FiX } from 'react-icons/fi';
+import FeaturedProductsCarousel from '../components/FeaturedProductsCarousel';
 
-// Helper function to format category names for display
+/**
+ * Formats a category name for display by removing prefixes, replacing hyphens with spaces,
+ * and capitalizing each word.
+ * @param {string} category - The category name to format
+ * @returns {string} The formatted category name
+ */
 const formatCategoryName = (category) => {
+  // Handle undefined or null category
+  if (!category) return 'Uncategorized';
+  
+  // Convert to string in case it's not
+  let formatted = String(category);
+  
   // Remove 'tea-bag-mixbox-' prefix if present
-  let formatted = category.replace(/^tea-bag-mixbox-/, '');
+  formatted = formatted.replace(/^tea-bag-mixbox-/, '');
+  
   // Replace hyphens with spaces
-  formatted = formatted.replace(/-/g, ' ');
+  formatted = formatted.replace(/-/g, ' ').trim();
+  
+  // If empty after processing
+  if (!formatted) return 'Uncategorized';
+  
   // Capitalize first letter of each word
   return formatted.split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(' ');
 };
 
-// Helper function to get the main category from the category string
+/**
+ * Gets the main category from a category string by normalizing and matching against known patterns.
+ * @param {string} category - The category string to process
+ * @returns {string|null} The display name of the main category or null if invalid
+ */
 const getMainCategory = (category) => {
-  // Normalize the category by converting to lowercase and trimming
-  const normalized = category.toLowerCase().trim();
+  // If category is falsy, return null to indicate no category
+  if (!category) return null;
+  
+  // Normalize the category by converting to string, lowercase and trimming
+  const normalized = String(category).trim();
+  
+  // If category is empty after normalization, return null
+  if (!normalized) return null;
   
   // Map of category patterns to their display names
   const categoryMap = {
@@ -35,154 +63,343 @@ const getMainCategory = (category) => {
     'herb tea': 'Herb Tea',
   };
   
-  // Try exact matches first
+  const lowerNormalized = normalized.toLowerCase();
+  
+  // Try exact matches first (case insensitive)
   for (const [pattern, displayName] of Object.entries(categoryMap)) {
-    if (normalized === pattern.toLowerCase()) {
+    if (lowerNormalized === pattern.toLowerCase()) {
       return displayName;
     }
   }
   
   // Try partial matches as fallback
   for (const [pattern, displayName] of Object.entries(categoryMap)) {
-    if (normalized.includes(pattern.toLowerCase())) {
+    if (lowerNormalized.includes(pattern.toLowerCase())) {
       return displayName;
     }
   }
   
-  // Default to the original category if no match found
-  return category;
+  // If we have a category but it's not in our map, return it as-is
+  return normalized;
 };
 
+/**
+ * ProductCard component that displays a single product with image, description, and add to cart button.
+ * Handles image loading states and fallbacks.
+ * @param {Object} props - Component props
+ * @param {Object} props.product - The product data to display
+ * @param {Function} props.onAddToCart - Callback when add to cart is clicked
+ * @param {boolean} props.isClicked - Whether this product was recently added to cart
+ * @param {Function} props.formatCategoryName - Function to format category names
+ * @returns {JSX.Element} The rendered product card
+ */
 const ProductCard = ({ product, onAddToCart, isClicked, formatCategoryName }) => {
-  const [currentImage, setCurrentImage] = useState('');
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const descriptionRef = useRef(null);
   const [isTruncated, setIsTruncated] = useState(false);
-  const imageRef = useRef(null);
-
-  // Set initial image
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
+  
+  // Define the path to the placeholder image using a relative path from public
+  const PLACEHOLDER_IMAGE = '/placeholder-product.jpg';
+  
+  // Get the images array, fallback to using image and image_2 if not available
+  const images = product.images || [
+    product.image,
+    product.image_2
+  ].filter(Boolean);
+  
+  // Get the hover image if available
+  const [hasValidHoverImage, setHasValidHoverImage] = useState(!!product.hoverImage);
+  
+  // Handle hover image error
+  const handleHoverImageError = () => {
+    console.warn('Failed to load hover image:', product.hoverImage);
+    setHasValidHoverImage(false);
+  };
+  
+  // Preload hover image on component mount
   useEffect(() => {
-    if (product.image_1) {
+    if (product.hoverImage) {
       const img = new Image();
-      img.src = product.image_1;
+      img.src = product.hoverImage;
+      img.onerror = handleHoverImageError;
+    }
+  }, [product.hoverImage]);
+  
+  // Ensure we always have at least the placeholder image
+  const displayImages = images.length > 0 ? images : [PLACEHOLDER_IMAGE];
+  
+  // Handle next/previous image
+  const nextImage = useCallback((e) => {
+    e?.stopPropagation();
+    setCurrentImageIndex((prevIndex) => 
+      prevIndex >= displayImages.length - 1 ? 0 : prevIndex + 1
+    );
+  }, [displayImages.length]);
+  
+  const prevImage = useCallback((e) => {
+    e?.stopPropagation();
+    setCurrentImageIndex((prevIndex) => 
+      prevIndex <= 0 ? displayImages.length - 1 : prevIndex - 1
+    );
+  }, [displayImages.length]);
+  
+  // Auto-rotate images when hovered (only if no hoverImage is available)
+  useEffect(() => {
+    let interval;
+    if (isHovered && displayImages.length > 1 && !hoverImage) {
+      interval = setInterval(() => {
+        nextImage();
+      }, 3000);
+    }
+    return () => clearInterval(interval);
+  }, [isHovered, nextImage, displayImages.length, hoverImage]);
+  
+  // Handle touch events for mobile swipe
+  const handleTouchStart = (e) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+  
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+  
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const diff = touchStart - touchEnd;
+    
+    // Minimum swipe distance to trigger image change
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) {
+        nextImage();
+      } else {
+        prevImage();
+      }
+    }
+    
+    setTouchStart(null);
+    setTouchEnd(null);
+  };
+  
+  // Set initial image and preload hover image if available
+  useEffect(() => {
+    if (displayImages.length > 0) {
+      const img = new Image();
+      const imageUrl = displayImages[0];
+      
+      // Skip if already loaded or if it's the placeholder
+      if (imageUrl === PLACEHOLDER_IMAGE) {
+        setIsImageLoaded(true);
+        return;
+      }
+      
+      img.src = imageUrl;
+      
+      // Preload hover image if available
+      if (hoverImage) {
+        const hoverImg = new Image();
+        hoverImg.src = hoverImage;
+      }
+      
       img.onload = () => {
-        setCurrentImage(product.image_1);
+        console.log(`✅ Successfully loaded image: ${imageUrl}`);
         setIsImageLoaded(true);
       };
-      img.onerror = () => {
-        // If primary image fails, try fallback
-        if (product.image_2) {
-          const fallbackImg = new Image();
-          fallbackImg.src = product.image_2;
-          fallbackImg.onload = () => {
-            setCurrentImage(product.image_2);
-            setIsImageLoaded(true);
-          };
-        }
+      
+      img.onerror = (e) => {
+        console.warn(`❌ Error loading image (${imageUrl}):`, e);
+        // Update the image source to use the placeholder
+        const imgElements = document.querySelectorAll(`img[src="${imageUrl}"]`);
+        imgElements.forEach(el => {
+          el.src = PLACEHOLDER_IMAGE;
+        });
+        setIsImageLoaded(true);
       };
+    } else {
+      // If no images, use the placeholder
+      setIsImageLoaded(true);
     }
-  }, [product.image_1, product.image_2]);
-
-  // Check if text is truncated
+  }, [displayImages]);
+  
+  // Check if description is truncated
   useEffect(() => {
     if (descriptionRef.current) {
-      const isTextTruncated = descriptionRef.current.scrollHeight > descriptionRef.current.clientHeight || 
-                             descriptionRef.current.scrollWidth > descriptionRef.current.clientWidth;
+      const element = descriptionRef.current;
+      const isTextTruncated = element.scrollHeight > element.clientHeight || 
+                             element.scrollWidth > element.clientWidth;
       setIsTruncated(isTextTruncated);
     }
   }, [product.description]);
 
-  const handleMouseEnter = () => {
-    if (product.image_2 && currentImage !== product.image_2) {
-      const img = new Image();
-      img.src = product.image_2;
-      img.onload = () => {
-        setCurrentImage(product.image_2);
-      };
-    }
+  // Handle add to cart
+  const handleAddToCart = (e) => {
+    e.preventDefault();
+    onAddToCart(product);
   };
 
-  const handleMouseLeave = () => {
-    if (product.image_1 && currentImage !== product.image_1) {
-      setCurrentImage(product.image_1);
-    }
+  // Toggle tooltip visibility
+  const toggleTooltip = (e, show) => {
+    e.stopPropagation();
+    setShowTooltip(show);
   };
 
   return (
     <div 
-      className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 mx-2 my-4 h-full flex flex-col"
+      className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 h-full flex flex-col"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
+      {/* Product Image Carousel */}
       <div 
-        className="aspect-square mb-6 rounded-lg overflow-hidden"
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
+        className="relative overflow-hidden rounded-lg bg-gray-50 aspect-square group"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onClick={(e) => e.stopPropagation()}
       >
-        {!isImageLoaded ? (
-          <div className="w-full h-full flex items-center justify-center bg-gray-50">
-            <div className="w-12 h-12 border-4 border-gray-200 border-t-gray-400 rounded-full animate-spin"></div>
+        {/* Hover image (loose leaf) */}
+        {hasValidHoverImage && (
+          <div 
+            className={`absolute inset-0 w-full h-full transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+          >
+            <img
+              src={product.hoverImage}
+              alt={`${product.name} - Hover`}
+              className="w-full h-full object-contain p-4"
+              onError={handleHoverImageError}
+              loading="lazy"
+            />
           </div>
-        ) : (
-          <img 
-            ref={imageRef}
-            src={currentImage}
-            alt={product.product_name || 'Product image'}
-            className="w-full h-full object-contain transform hover:scale-105 transition-transform duration-300 p-4"
-            onError={(e) => {
-              e.target.onerror = null;
-              // Show placeholder on error
-              e.target.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2QxZDFkMSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0xOCAxM0g2YTUgNSAwIDAgMC03IDlIMjBhNSA1IDAgMCAwLTUtNXoiPjwvcGF0aD48Y2lyY2xlIGN4PSIxMiIgY3k9IjEwIiByPSI0Ij48L2NpcmNsZT48L3N2Zz4=';
-              e.target.className = 'w-full h-full bg-gray-100 p-12';
-            }}
-          />
+        )}
+        
+        {/* Loading indicator */}
+        {!isImageLoaded && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="animate-pulse bg-gray-200 w-full h-full"></div>
+          </div>
+        )}
+        
+        {/* Main Image */}
+        <img
+          src={displayImages[currentImageIndex] || PLACEHOLDER_IMAGE}
+          alt={`${product.name} - ${currentImageIndex + 1} of ${displayImages.length}`}
+          className={`absolute top-0 left-0 w-full h-full object-contain p-4 transition-opacity duration-300 ${
+            isImageLoaded ? 'opacity-100' : 'opacity-0'
+          } ${isHovered && hasValidHoverImage ? 'opacity-0' : 'opacity-100'}`}
+          onLoad={() => {
+            console.log(`Image loaded: ${displayImages[currentImageIndex]}`);
+            setIsImageLoaded(true);
+          }}
+          onError={(e) => {
+            const failedSrc = e.target.src;
+            console.error(`Failed to load image: ${failedSrc}`);
+            if (failedSrc !== PLACEHOLDER_IMAGE) {
+              e.target.src = PLACEHOLDER_IMAGE;
+              // Force a re-render to ensure placeholder is shown
+              setIsImageLoaded(false);
+              setTimeout(() => setIsImageLoaded(true), 50);
+            }
+          }}
+          loading="lazy"
+        />
+        
+        {/* Navigation Arrows */}
+        {displayImages.length > 1 && (
+          <>
+            <button 
+              onClick={prevImage}
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-indigo-600 rounded-full p-2 shadow-md z-10 transition-all duration-200 opacity-0 group-hover:opacity-100 hover:shadow-lg hover:scale-110"
+              aria-label="Previous image"
+            >
+              <FiChevronLeft className="w-5 h-5" />
+            </button>
+            <button 
+              onClick={nextImage}
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-indigo-600 rounded-full p-2 shadow-md z-10 transition-all duration-200 opacity-0 group-hover:opacity-100 hover:shadow-lg hover:scale-110"
+              aria-label="Next image"
+            >
+              <FiChevronRight className="w-5 h-5" />
+            </button>
+          </>
+        )}
+        
+        {/* Dots Navigation */}
+        {displayImages.length > 1 && (
+          <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-1 z-10">
+            {displayImages.map((_, index) => (
+              <button
+                key={index}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setCurrentImageIndex(index);
+                }}
+                className={`w-2 h-2 rounded-full transition-all duration-200 ${index === currentImageIndex ? 'bg-blue-800 w-4' : 'bg-white/50'}`}
+                aria-label={`Go to image ${index + 1}`}
+                aria-current={index === currentImageIndex ? 'true' : 'false'}
+              />
+            ))}
+          </div>
         )}
       </div>
-      <div className="flex-grow px-1">
-        <div className="text-sm text-gray-500 mb-1">
-          {formatCategoryName(product.category)}
+      
+      {/* Product Info */}
+      <div className="p-4 flex flex-col flex-grow">
+        <div className="flex justify-between items-start mb-2">
+          <h3 className="text-lg font-medium text-gray-900 line-clamp-2">
+            {product.name}
+          </h3>
+          <span className="text-lg font-semibold text-gray-900 whitespace-nowrap ml-2">
+            {product.displayPrice}
+          </span>
         </div>
-        <h3 className="text-xl font-medium mb-1 line-clamp-2 min-h-[3rem]">
-          {product.name}
-        </h3>
-        <div className="relative">
-          <p 
+        
+        {product.germanName && product.germanName !== product.name && (
+          <p className="text-sm text-gray-500 italic">{product.germanName}</p>
+        )}
+        
+        <div className="mt-2 mb-4 flex-grow">
+          <div 
             ref={descriptionRef}
-            className="text-gray-600 text-sm mb-3 line-clamp-2 min-h-[2.5rem] relative group"
-            onMouseEnter={() => isTruncated && setShowTooltip(true)}
-            onMouseLeave={() => setShowTooltip(false)}
-            aria-label={product.description}
+            className={`text-sm text-gray-600 line-clamp-3 ${isTruncated ? 'cursor-help' : ''}`}
+            onMouseEnter={(e) => isTruncated && toggleTooltip(e, true)}
+            onMouseLeave={(e) => toggleTooltip(e, false)}
           >
             {product.description}
-            {isTruncated && (
-              <span className="absolute bottom-0 right-0 bg-white pl-1 text-gray-400">...</span>
-            )}
-          </p>
-          {isTruncated && showTooltip && (
-            <div 
-              className="absolute z-10 w-64 p-3 mt-1 text-sm text-gray-700 bg-white border border-gray-200 rounded-lg shadow-lg"
-              role="tooltip"
-            >
+          </div>
+          {showTooltip && isTruncated && (
+            <div className="fixed bg-gray-900 text-white text-xs rounded px-2 py-1 z-50 pointer-events-none max-w-xs">
               {product.description}
-              <div className="absolute -top-1.5 left-4 w-3 h-3 bg-white border-t border-l border-gray-200 transform rotate-45"></div>
             </div>
           )}
         </div>
-      </div>
-      <div className="mt-auto">
-        <div className="flex justify-between items-center">
-          <span className="text-lg font-medium text-gray-900">
-            ${parseFloat(product.price).toFixed(2)}
+        
+        <div className="mt-4 flex justify-between items-center">
+          <span className="text-lg font-semibold text-gray-900">
+            {product.displayPrice}
           </span>
-          <button 
-            onClick={() => onAddToCart(product)}
+          <button
+            onClick={handleAddToCart}
             className={`
               bg-gray-900 text-white px-4 py-2 rounded-md
               transition-all duration-200 ease-in-out
-              hover:bg-gray-800
-              ${isClicked ? 'scale-90' : 'scale-100'}
+              hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2
+              ${isClicked ? 'scale-95' : 'scale-100 hover:scale-105'}
+              flex items-center justify-center gap-2 text-sm font-medium
             `}
           >
-            Add to Cart
+            <span>Add to Cart</span>
+            {isClicked && (
+              <svg className="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            )}
           </button>
         </div>
       </div>
@@ -190,6 +407,11 @@ const ProductCard = ({ product, onAddToCart, isClicked, formatCategoryName }) =>
   );
 };
 
+/**
+ * Products page component that displays a filterable, paginated grid of products
+ * organized by category. Handles loading states, error states, and product filtering.
+ * @returns {JSX.Element} The rendered products page
+ */
 const Products = () => {
   const { addToCart } = useCart();
   const [notification, setNotification] = useState({ show: false, productName: '' });
@@ -205,107 +427,189 @@ const Products = () => {
   
   // Process and filter products
   const { filteredProducts, categories, productsByCategory, totalPages, currentItems } = useMemo(() => {
-    if (!products.length) return { filteredProducts: [], categories: [], productsByCategory: {}, totalPages: 0, currentItems: [] };
+    console.log('Processing products...');
+    
+    // Initialize default values
+    const defaultReturn = { 
+      filteredProducts: [], 
+      categories: [], 
+      productsByCategory: {}, 
+      totalPages: 0, 
+      currentItems: [] 
+    };
+    
+    if (!products || !products.length) {
+      console.log('No products to process');
+      return defaultReturn;
+    }
+    
+    console.log(`Processing ${products.length} products`);
+    
+    // Helper function to process image URLs to check both locations:
+    // 1. Directly in src/assets/
+    // 2. In src/assets/Tea Catalogue/[product_id]/
+    const processImageUrl = (imagePath, product) => {
+      try {
+        // If no image path is provided, return null to be filtered out
+        if (!imagePath) return null;
+        
+        // Convert to string and trim
+        let imgUrl = String(imagePath).trim();
+        if (!imgUrl) return null;
+        
+        // If it's already a full URL or data URL, return as is
+        if (imgUrl.startsWith('http') || imgUrl.startsWith('data:')) {
+          return imgUrl;
+        }
+        
+        // Extract just the filename (remove any path components)
+        const filename = imgUrl.split(/[\\/]/).pop();
+        
+        // Get the product ID from the product object
+        const productId = product?._id || product?.id || '';
+        
+        // Try to extract product number from ID (e.g., '21024' from 'tea-bag-mixbox-21024')
+        const productNumber = productId.split('-').find(part => /^\d+$/.test(part));
+        
+        // First, check if the file exists in the Tea Catalogue product directory
+        if (productNumber) {
+          const teaCataloguePath = `/src/assets/Tea Catalogue/${productNumber}/${filename}`;
+          // In a real app, you might want to check if the file exists before returning the path
+          return teaCataloguePath;
+        }
+        
+        // If no product number, check if the file exists in the root assets directory
+        const rootAssetsPath = `/src/assets/${filename}`;
+        // In a real app, you might want to check if the file exists before returning the path
+        
+        // Return the root assets path if the file exists there, otherwise try Tea Catalogue
+        return rootAssetsPath;
+      } catch (error) {
+        console.error('Error processing image URL:', error, 'Image path:', imagePath);
+        console.log('Product ID:', product?._id, 'Product Code:', product?.code);
+        return null;
+      }
+    };
     
     // Process all products
     const allCategories = new Set();
-    const processedProducts = [];
     
-    products.forEach(product => {
-      if (!product.isActive) return;
-      
-      const category = getMainCategory(product.category);
-      allCategories.add(category);
-      
-      // Process image paths to handle both local and remote images
-      const getImagePath = (imageName) => {
-        if (!imageName) return '';
+    // First, filter out inactive products
+    const activeProducts = products.filter(product => product.isActive !== false);
+    
+    // Then map and process the remaining products
+    const processedProducts = activeProducts.map((product) => {
+      try {
+        const category = getMainCategory(product.category || '');
+        allCategories.add(category);
         
-        // If it's already a full URL, return it as is
-        if (imageName.startsWith('http') || imageName.startsWith('data:')) {
-          return imageName;
-        }
-        
-        // Remove any leading slashes or paths, just get the filename
-        const cleanName = imageName.split('/').pop().split('\\').pop();
-        
-        // First try to import directly (for Vite/Webpack)
-        try {
-          const imageModule = import.meta.glob('/src/assets/*', { eager: true });
-          const imagePath = Object.keys(imageModule).find(path => 
-            path.endsWith(cleanName)
-          );
-          if (imagePath) {
-            return imageModule[imagePath].default;
-          }
-        } catch (e) {
-          console.warn(`Could not import image module: ${cleanName}`, e);
-        }
-        
-        // Fallback to URL resolution - ensure we're using the correct base path
-        try {
-          // Try with /assets/ first (public directory)
-          const publicUrl = `/assets/${cleanName}`;
-          // Then fall back to /src/assets/ if needed
-          return new URL(publicUrl, window.location.origin).href;
-        } catch (e) {
-          console.warn(`Could not resolve image URL: ${cleanName}`, e);
-        }
-        
-        // If all else fails, return the original path
-        return imageName;
-      };
+        // Get all image fields from the product
+        const imageFields = [
+          'Loose Leaf Path',
+          'Tea Box - Main',
+          'Tea Box - German',
+          'Tea Box - English',
+          'Tea Box - Other Sizes/Views 1',
+          'Tea Box - Other Sizes/Views 2',
+          'Tea Box - Other Sizes/Views 3',
+          'Tea Box - Other Sizes/Views 4',
+          'Tea Bag - Individual 1',
+          'Tea Bag - Individual 2',
+          'Tea Bag - Individual 3',
+          'Tea Bag - Individual 4',
+          'Tea Bag - With Box 1',
+          'Tea Bag - With Box 2',
+          'Tea Bags - Pyramid Aesthetic',
+          'Tea Bags - Clear Packaging 1',
+          'Tea Bags - Clear Packaging 2',
+          'Aesthetic/Postcard Image 1',
+          'Aesthetic/Postcard Image 2',
+          'image_1',
+          'image_2',
+          'image'
+        ];
 
-      // Get the best available image, falling back through the chain
-      const primaryImage = product.image_1 || product.image;
-      const secondaryImage = product.image_2 || primaryImage;
+        // Process all image fields and filter out null/empty values
+        const allImages = imageFields
+          .map(field => processImageUrl(product[field], product))
+          .filter(img => img !== null && img !== '');
 
-      processedProducts.push({
-        ...product,
-        name: product.name || product.product_name,
-        category,
-        // Use direct imports for images
-        image: getImagePath(primaryImage),
-        image_1: getImagePath(primaryImage),
-        image_2: getImagePath(secondaryImage),
-        searchText: `${product.name || ''} ${product.product_name || ''} ${product.description || ''} ${category || ''}`.toLowerCase()
-      });
-    });
+        // Ensure we have at least the placeholder image
+        const images = allImages.length > 0 
+          ? allImages 
+          : ['/images/placeholder-product.jpg'];
+          
+        // Get the English and German names from the product data
+        const name = product['English Name'] || product.name || product.product_name || 'Unnamed Product';
+        const germanName = product['German Name'] || name;
+        
+        // Get the price (you may need to adjust this based on your pricing logic)
+        const price = parseFloat(product.price) || 0;
+        
+        return {
+          ...product,
+          id: product.id || product._id || `product-${Math.random().toString(36).substr(2, 9)}`,
+          name,
+          germanName,
+          price,
+          displayPrice: `R${price.toFixed(2)}`,
+          images, // Include all processed images
+          image: images[0] || '/images/placeholder-product.jpg',
+          image_1: images[0] || '/images/placeholder-product.jpg',
+          image_2: images[1] || images[0] || '/images/placeholder-product.jpg',
+          category: product.category || 'Uncategorized',
+          category_name: product.category || 'Uncategorized',
+          category_slug: String(product.category || '').toLowerCase().replace(/\s+/g, '-'),
+          searchText: `${name} ${germanName} ${product.description || ''} ${product.category || ''}`.toLowerCase()
+        };
+      } catch (error) {
+        console.error('Error processing product:', error, 'Product data:', product);
+        return null;
+      }
+    }).filter(Boolean); // Remove any null entries from failed processing
+    
+    console.log(`Processed ${processedProducts.length} products`);
     
     // Apply filters
     let result = [...processedProducts];
     
     // Filter by search query
     if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      result = result.filter(product => 
-        product.searchText.includes(query)
-      );
+      const query = searchQuery.toLowerCase().trim();
+      if (query) {
+        result = result.filter(product => 
+          product.searchText.includes(query)
+        );
+      }
     }
     
     // Filter by category
-    if (selectedCategory !== 'All') {
+    if (selectedCategory && selectedCategory !== 'All') {
       result = result.filter(product => product.category === selectedCategory);
     }
     
+    console.log(`After filtering: ${result.length} products`);
+    
     // Pagination
-    const totalPages = Math.ceil(result.length / itemsPerPage);
+    const totalPages = Math.max(1, Math.ceil(result.length / itemsPerPage));
     const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const indexOfFirstItem = (currentPage - 1) * itemsPerPage;
     const currentItems = result.slice(indexOfFirstItem, indexOfLastItem);
     
     // Group by category for display
-    const productsByCategory = currentItems.reduce((acc, product) => {
-      if (!acc[product.category]) {
-        acc[product.category] = [];
+    const productsByCategory = {};
+    currentItems.forEach(product => {
+      if (product.category) {
+        if (!productsByCategory[product.category]) {
+          productsByCategory[product.category] = [];
+        }
+        productsByCategory[product.category].push(product);
       }
-      acc[product.category].push(product);
-      return acc;
-    }, {});
+    });
     
     return {
       filteredProducts: result,
-      categories: ['All', ...Array.from(allCategories).sort()],
+      categories: Array.from(new Set(processedProducts.map(p => p.category).filter(Boolean))).sort(),
       productsByCategory,
       totalPages,
       currentItems
@@ -320,70 +624,121 @@ const Products = () => {
     setCurrentPage(1);
   }, [selectedCategory, searchQuery]);
   
-  const sortedCategories = Object.keys(productsByCategory).sort();
+  // Get sorted categories for the filter dropdown
+  const sortedCategories = useMemo(() => {
+    if (!products || !products.length) return [];
+    
+    const categories = new Set();
+    products.forEach(product => {
+      const category = product.category_name || product.category;
+      if (category) {
+        categories.add(category);
+      }
+    });
+    
+    return Array.from(categories).filter(Boolean).sort();
+  }, [products]);
   
-  // Fetch products from the backend with pagination support
+  /**
+   * Ensures that productsByCategory is always an object.
+   * If productsByCategory is null or undefined, returns an empty object.
+   * @returns {Object} productsByCategory
+   */
+  const safeProductsByCategory = useMemo(() => {
+    return productsByCategory || {};
+  }, [productsByCategory]);
+  
+  /**
+   * Renders products grouped by their category with section headers.
+   * @returns {JSX.Element[]|null} Array of category sections or null if no categories
+   */
+  const renderProductsByCategory = () => {
+    if (!sortedCategories || !sortedCategories.length) return null;
+    
+    return sortedCategories.map((category) => {
+      const categoryProducts = safeProductsByCategory[category] || [];
+      if (categoryProducts.length === 0) return null;
+      
+      return (
+        <section key={category} className="mb-16">
+          {/* Category Header */}
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-medium text-gray-900 inline-block relative pb-2">
+              {category}
+              <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-16 h-0.5 bg-gray-900"></span>
+            </h2>
+          </div>
+          
+          {/* Products Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            {categoryProducts.map((product) => (
+              <ProductCard 
+                key={product._id}
+                product={product}
+                onAddToCart={handleAddToCart}
+                isClicked={clickedId === product._id}
+                formatCategoryName={formatCategoryName}
+              />
+            ))}
+          </div>
+        </section>
+      );
+    });
+  };
+  
+  /**
+   * Loads products from the API with pagination support.
+   * Handles loading and error states.
+   * @async
+   */
   useEffect(() => {
-    const fetchProducts = async () => {
+    const loadProducts = async () => {
       try {
         setLoading(true);
         setError('');
-        console.log('Fetching products from API...');
+        console.log('Loading products from API...');
         
-        // This will now fetch all pages and return a flat array of products
-        const productsData = await productService.getAll();
+        // Fetch all products with pagination
+        const { products: productsData } = await productService.getAll({ 
+          fetchAll: true, // This will fetch all pages
+          limit: 100 // Increase limit to reduce number of API calls
+        });
         
-        if (!productsData || !Array.isArray(productsData)) {
-          throw new Error('Invalid products data received');
+        if (!Array.isArray(productsData)) {
+          throw new Error('Failed to load products data: Invalid format');
         }
         
-        console.log(`Successfully fetched ${productsData.length} products`);
-        
-        // Log active/inactive counts
-        const activeCount = productsData.filter(p => p.isActive !== false).length;
-        console.log(`Active products: ${activeCount}/${productsData.length} (${(activeCount/productsData.length*100).toFixed(1)}%)`);
-        
-        // Log categories and counts
-        const categoryCounts = productsData.reduce((acc, product) => {
-          const category = getMainCategory(product.category);
-          acc[category] = (acc[category] || 0) + 1;
-          return acc;
-        }, {});
-        console.log('Products by category:', categoryCounts);
-        
+        console.log(`Successfully loaded ${productsData.length} products`);
         setProducts(productsData);
       } catch (error) {
-        console.error('Error fetching products:', error);
-        const errorMessage = error.message 
-          ? `Error: ${error.message}`
-          : 'Failed to load products. Please check your connection and try again.';
-        setError(errorMessage);
+        console.error('Error loading products:', error);
+        setError(error.message || 'Failed to load products. Please try again.');
       } finally {
         setLoading(false);
       }
     };
     
-    fetchProducts();
+    loadProducts();
   }, []);
   
+  /**
+   * Handles adding a product to the cart and showing a notification.
+   * @param {Object} product - The product to add to the cart
+   */
   const handleAddToCart = (product) => {
     addToCart({
       ...product,
       // Ensure price is a number for the cart
       price: parseFloat(product.price) || 0
     });
-    setClickedId(product._id);
+    
+    setClickedId(product.id);
     setNotification({ show: true, productName: product.name });
     
-    // Reset button animation
+    // Hide notification after 3 seconds
     setTimeout(() => {
-      setClickedId(null);
-    }, 200);
-    
-    // Hide notification
-    setTimeout(() => {
-      setNotification({ show: false, productName: '' });
-    }, 2000);
+      setNotification(prev => ({ ...prev, show: false }));
+    }, 3000);
   };
 
   if (loading) {
@@ -409,6 +764,11 @@ const Products = () => {
       {/* Featured Products Carousel */}
       <div className="bg-gray-50">
         <ProductsCarousel />
+      </div>
+
+      {/* Our Featured Teas Section */}
+      <div className="py-16 bg-white">
+        <FeaturedProductsCarousel />
       </div>
 
       <div className="py-12 px-4">
@@ -490,143 +850,88 @@ const Products = () => {
             </p>
           </div>
           
-          {/* Categories and Products */}
           {filteredProducts.length > 0 ? (
-            <div className="space-y-16">
-              {sortedCategories.map((category) => (
-                <section key={category} className="mb-16">
-                  {/* Category Header */}
-                  <div className="text-center mb-8">
-                    <h2 className="text-2xl font-medium text-gray-900 inline-block relative pb-2">
-                      {category}
-                      <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-16 h-0.5 bg-gray-900"></span>
-                    </h2>
-                  </div>
+            <>
+              {/* Page Numbers */}
+              <div className="flex justify-center mt-8 space-x-2">
+                {/* Previous Page Button */}
+                <button
+                  onClick={() => paginate(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className={`px-3 py-1 rounded-md ${currentPage === 1 ? 'text-gray-400 cursor-not-allowed' : 'text-gray-700 hover:bg-gray-100'}`}
+                  aria-label="Previous page"
+                >
+                  <FiChevronLeft className="w-5 h-5" />
+                </button>
+
+                {/* Page Numbers */}
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  let pageNum;
+                  if (totalPages <= 5) {
+                    pageNum = i + 1;
+                  } else if (currentPage <= 3) {
+                    pageNum = i + 1;
+                  } else if (currentPage >= totalPages - 2) {
+                    pageNum = totalPages - 4 + i;
+                  } else {
+                    pageNum = currentPage - 2 + i;
+                  }
                   
-                  {/* Products Grid */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                    {productsByCategory[category].map((product) => (
-                      <ProductCard 
-                        key={product._id}
-                        product={product}
-                        onAddToCart={handleAddToCart}
-                        isClicked={clickedId === product._id}
-                        formatCategoryName={formatCategoryName}
-                      />
-                    ))}
-                  </div>
-                </section>
-              ))}
-              
-              {/* Enhanced Pagination */}
-              {totalPages > 1 && (
-                <div className="mt-16">
-                  <div className="flex items-center justify-center space-x-2">
-                    {/* Previous Button */}
+                  if (pageNum < 1 || pageNum > totalPages) return null;
+                  
+                  return (
                     <button
-                      onClick={() => paginate(Math.max(1, currentPage - 1))}
-                      disabled={currentPage === 1}
-                      className={`px-4 py-2 rounded-md flex items-center transition-all duration-200 ${
-                        currentPage === 1
-                          ? 'text-gray-400 cursor-not-allowed'
-                          : 'text-gray-900 hover:bg-gray-100'
+                      key={pageNum}
+                      onClick={() => paginate(pageNum)}
+                      className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 ${
+                        currentPage === pageNum
+                          ? 'bg-gray-900 text-white transform scale-105 shadow-md'
+                          : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
                       }`}
-                      aria-label="Previous page"
                     >
-                      <FiChevronLeft className="w-5 h-5" />
-                      <span className="ml-1 hidden sm:inline">Previous</span>
+                      {pageNum}
                     </button>
+                  );
+                })}
 
-                    {/* First Page */}
-                    {currentPage > 3 && totalPages > 5 && (
-                      <>
-                        <button
-                          onClick={() => paginate(1)}
-                          className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-200 ${
-                            currentPage === 1
-                              ? 'bg-gray-900 text-white shadow-md'
-                              : 'text-gray-700 hover:bg-gray-100'
-                          }`}
-                        >
-                          1
-                        </button>
-                        {currentPage > 4 && (
-                          <span className="px-1 text-gray-400">...</span>
-                        )}
-                      </>
+                {/* Last Page */}
+                {currentPage < totalPages - 2 && totalPages > 5 && (
+                  <>
+                    {currentPage < totalPages - 3 && (
+                      <span className="px-1 text-gray-400">...</span>
                     )}
-
-                    {/* Page Numbers */}
-                    {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                      let pageNum;
-                      if (totalPages <= 5) {
-                        pageNum = i + 1;
-                      } else if (currentPage <= 3) {
-                        pageNum = i + 1;
-                      } else if (currentPage >= totalPages - 2) {
-                        pageNum = totalPages - 4 + i;
-                      } else {
-                        pageNum = currentPage - 2 + i;
-                      }
-                      
-                      if (pageNum < 1 || pageNum > totalPages) return null;
-                      
-                      return (
-                        <button
-                          key={pageNum}
-                          onClick={() => paginate(pageNum)}
-                          className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 ${
-                            currentPage === pageNum
-                              ? 'bg-gray-900 text-white transform scale-105 shadow-md'
-                              : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-                          }`}
-                          aria-current={currentPage === pageNum ? 'page' : undefined}
-                        >
-                          {pageNum}
-                        </button>
-                      );
-                    })}
-
-                    {/* Last Page */}
-                    {currentPage < totalPages - 2 && totalPages > 5 && (
-                      <>
-                        {currentPage < totalPages - 3 && (
-                          <span className="px-1 text-gray-400">...</span>
-                        )}
-                        <button
-                          onClick={() => paginate(totalPages)}
-                          className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-200 ${
-                            currentPage === totalPages
-                              ? 'bg-gray-900 text-white shadow-md'
-                              : 'text-gray-700 hover:bg-gray-100'
-                          }`}
-                        >
-                          {totalPages}
-                        </button>
-                      </>
-                    )}
-
-                    {/* Next Button */}
                     <button
-                      onClick={() => paginate(Math.min(totalPages, currentPage + 1))}
-                      disabled={currentPage === totalPages}
-                      className={`px-4 py-2 rounded-md flex items-center transition-all duration-200 ${
+                      onClick={() => paginate(totalPages)}
+                      className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-200 ${
                         currentPage === totalPages
-                          ? 'text-gray-400 cursor-not-allowed'
-                          : 'text-gray-900 hover:bg-gray-100'
+                          ? 'bg-gray-900 text-white shadow-md'
+                          : 'text-gray-700 hover:bg-gray-100'
                       }`}
-                      aria-label="Next page"
                     >
-                      <span className="mr-1 hidden sm:inline">Next</span>
-                      <FiChevronRight className="w-5 h-5" />
+                      {totalPages}
                     </button>
-                  </div>
-                  <div className="mt-4 text-center text-sm text-gray-600">
-                    Page {currentPage} of {totalPages}
-                  </div>
-                </div>
-              )}
-            </div>
+                  </>
+                )}
+
+                {/* Next Button */}
+                <button
+                  onClick={() => paginate(Math.min(totalPages, currentPage + 1))}
+                  disabled={currentPage === totalPages}
+                  className={`px-4 py-2 rounded-md flex items-center transition-all duration-200 ${
+                    currentPage === totalPages
+                      ? 'text-gray-400 cursor-not-allowed'
+                      : 'text-gray-900 hover:bg-gray-100'
+                  }`}
+                  aria-label="Next page"
+                >
+                  <span className="mr-1 hidden sm:inline">Next</span>
+                  <FiChevronRight className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="mt-4 text-center text-sm text-gray-600">
+                Page {currentPage} of {totalPages}
+              </div>
+            </>
           ) : (
             <div className="text-center py-12 bg-white rounded-lg shadow-sm">
               <h3 className="text-lg font-medium text-gray-900 mb-2">No products found</h3>
@@ -644,15 +949,115 @@ const Products = () => {
               </button>
             </div>
           )}
+          
+          {/* Product Grid */}
+          <div className="mt-8 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
+            {currentItems.map((product) => (
+              <ProductCard
+                key={product._id}
+                product={product}
+                onAddToCart={handleAddToCart}
+                isClicked={clickedId === product._id}
+                formatCategoryName={formatCategoryName}
+              />
+            ))}
+          </div>
+          
+          {/* Pagination Controls - Bottom */}
+          {filteredProducts.length > 0 && (
+            <div className="flex justify-center mt-12 space-x-2">
+              <button
+                onClick={() => paginate(currentPage - 1)}
+                disabled={currentPage === 1}
+                className={`px-3 py-1 rounded-md ${currentPage === 1 ? 'text-gray-400 cursor-not-allowed' : 'text-gray-700 hover:bg-gray-100'}`}
+                aria-label="Previous page"
+              >
+                <FiChevronLeft className="w-5 h-5" />
+              </button>
+              
+              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                let pageNum;
+                if (totalPages <= 5) {
+                  pageNum = i + 1;
+                } else if (currentPage <= 3) {
+                  pageNum = i + 1;
+                } else if (currentPage >= totalPages - 2) {
+                  pageNum = totalPages - 4 + i;
+                } else {
+                  pageNum = currentPage - 2 + i;
+                }
+                
+                if (pageNum < 1 || pageNum > totalPages) return null;
+                
+                return (
+                  <button
+                    key={pageNum}
+                    onClick={() => paginate(pageNum)}
+                    className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 ${
+                      currentPage === pageNum
+                        ? 'bg-gray-900 text-white transform scale-105 shadow-md'
+                        : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                    }`}
+                  >
+                    {pageNum}
+                  </button>
+                );
+              })}
+              
+              <button
+                onClick={() => paginate(Math.min(totalPages, currentPage + 1))}
+                disabled={currentPage === totalPages}
+                className={`px-3 py-1 rounded-md ${currentPage === totalPages ? 'text-gray-400 cursor-not-allowed' : 'text-gray-700 hover:bg-gray-100'}`}
+                aria-label="Next page"
+              >
+                <FiChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+          )}
+          
+          <AddToCartNotification 
+            show={notification.show} 
+            productName={notification.productName} 
+          />
         </div>
       </div>
-      
-      <AddToCartNotification 
-        show={notification.show} 
-        productName={notification.productName} 
-      />
     </div>
   );
+};
+
+// Prop type definitions
+ProductCard.propTypes = {
+  product: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    price: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string
+    ]).isRequired,
+    category: PropTypes.string.isRequired,
+    image_1: PropTypes.string,
+    image_2: PropTypes.string,
+    images: PropTypes.arrayOf(PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.shape({
+        url: PropTypes.string
+      })
+    ])),
+    isActive: PropTypes.bool,
+    featured: PropTypes.bool,
+    stock: PropTypes.number,
+    rating: PropTypes.number,
+    numReviews: PropTypes.number
+  }).isRequired,
+  onAddToCart: PropTypes.func.isRequired,
+  isClicked: PropTypes.bool,
+  formatCategoryName: PropTypes.func.isRequired
+};
+
+// Products component prop types
+Products.propTypes = {
+  // Add any props that the Products component might receive
 };
 
 export default Products;

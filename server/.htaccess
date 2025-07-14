@@ -1,0 +1,21 @@
+# Enable URL rewriting
+RewriteEngine On
+
+# Allow direct access to files in the Tea Catalogue directory
+RewriteCond %{REQUEST_URI} ^/Tea%20Catalogue/ [NC]
+RewriteCond %{DOCUMENT_ROOT}/server/Tea%20Catalogue/$1 -f [NC]
+RewriteRule ^Tea%20Catalogue/(.*)$ /server/Tea%20Catalogue/$1 [L,NC]
+
+# If the requested file or directory doesn't exist
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Rewrite all other requests to index.php
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+# CORS headers are now handled by the root .htaccess file
+# No need to set them here to avoid duplication
+
+# Handle preflight requests (this can stay as it doesn't set headers)
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^(.*)$ $1 [R=200,L]

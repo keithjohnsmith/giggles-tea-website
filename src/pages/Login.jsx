@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { FiEye, FiEyeOff, FiLoader, FiArrowLeft } from 'react-icons/fi';
+import React from 'react';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -218,9 +219,9 @@ const Login = () => {
                 disabled={isLoading || !isFormValid()}
                 className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
                   isLoading || !isFormValid() 
-                    ? 'bg-indigo-400 cursor-not-allowed' 
-                    : 'bg-indigo-600 hover:bg-indigo-700'
-                } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
+                    ? 'bg-gray-400 cursor-not-allowed' 
+                    : 'bg-gray-800 hover:bg-gray-900'
+                } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500`}
               >
                 {isLoading ? (
                   <>

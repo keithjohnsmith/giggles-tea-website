@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Simple Products API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #4a5568;
+        }
+        button {
+            background-color: #4299e1;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        button:hover {
+            background-color: #3182ce;
+        }
+        pre {
+            background-color: #f7fafc;
+            border: 1px solid #e2e8f0;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .success {
+            color: #2f855a;
+            font-weight: bold;
+        }
+        .error {
+            color: #c53030;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Simple Products API</h1>
+    
+    <div>
+        <button id="testDirectApi">Test Direct API Access</button>
+        <button id="testRouterApi">Test Router API Access</button>
+    </div>
+    
+    <h2>Results:</h2>
+    <div id="results">
+        <p>Click a button to test the API</p>
+    </div>
+    
+    <script>
+        document.getElementById('testDirectApi').addEventListener('click', async () => {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<p>Testing direct API access...</p>';
+            
+            try {
+                const response = await fetch('http://localhost/giggles-tea/api/products_simple.php');
+                const status = response.status;
+                const headers = {};
+                
+                for (const [key, value] of response.headers.entries()) {
+                    headers[key] = value;
+                }
+                
+                try {
+                    const data = await response.json();
+                    resultsDiv.innerHTML = `
+                        <p class="success">Status: Success</p>
+                        <p>Response Status: ${status}</p>
+                        <h3>Headers:</h3>
+                        <pre>${JSON.stringify(headers, null, 2)}</pre>
+                        <h3>Data:</h3>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } catch (jsonError) {
+                    const text = await response.text();
+                    resultsDiv.innerHTML = `
+                        <p class="error">Status: Error</p>
+                        <p>Response Status: ${status}</p>
+                        <p>Error: ${jsonError.message}</p>
+                        <h3>Headers:</h3>
+                        <pre>${JSON.stringify(headers, null, 2)}</pre>
+                        <h3>Raw Response:</h3>
+                        <pre>${text}</pre>
+                    `;
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <p class="error">Status: Error</p>
+                    <p>Error: ${error.message}</p>
+                `;
+            }
+        });
+        
+        document.getElementById('testRouterApi').addEventListener('click', async () => {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<p>Testing router API access...</p>';
+            
+            try {
+                const response = await fetch('http://localhost/giggles-tea/server/api/products_simple');
+                const status = response.status;
+                const headers = {};
+                
+                for (const [key, value] of response.headers.entries()) {
+                    headers[key] = value;
+                }
+                
+                try {
+                    const data = await response.json();
+                    resultsDiv.innerHTML = `
+                        <p class="success">Status: Success</p>
+                        <p>Response Status: ${status}</p>
+                        <h3>Headers:</h3>
+                        <pre>${JSON.stringify(headers, null, 2)}</pre>
+                        <h3>Data:</h3>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } catch (jsonError) {
+                    const text = await response.text();
+                    resultsDiv.innerHTML = `
+                        <p class="error">Status: Error</p>
+                        <p>Response Status: ${status}</p>
+                        <p>Error: ${jsonError.message}</p>
+                        <h3>Headers:</h3>
+                        <pre>${JSON.stringify(headers, null, 2)}</pre>
+                        <h3>Raw Response:</h3>
+                        <pre>${text}</pre>
+                    `;
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <p class="error">Status: Error</p>
+                    <p>Error: ${error.message}</p>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

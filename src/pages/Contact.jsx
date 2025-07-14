@@ -65,8 +65,10 @@ const Contact = () => {
                 <div>
                   <h3 className="text-lg font-medium mb-2">Visit Us</h3>
                   <p className="text-gray-600">
-                    123 Tea Garden Lane<br />
-                    New York, NY 10001
+                    Room 16, Gain Building<br />
+                    Avondale<br />
+                    Harare<br />
+                    Zimbabwe
                   </p>
                 </div>
                 <div>
@@ -79,8 +81,8 @@ const Contact = () => {
                 <div>
                   <h3 className="text-lg font-medium mb-2">Contact</h3>
                   <p className="text-gray-600">
-                    Email: smith.keithjohn@gmail.com<br />
-                    Phone: (555) 123-4567
+                    Email: info@gigglestea.com<br />
+                    Phone: +263 78 050 2845
                   </p>
                 </div>
               </div>

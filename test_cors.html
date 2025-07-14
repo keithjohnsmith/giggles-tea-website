@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORS Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4F46E5;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            overflow: auto;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>CORS Test for Giggles Tea API</h1>
+    
+    <div>
+        <h2>Test CORS with test_cors.php</h2>
+        <button id="testCorsBtn">Test CORS Endpoint</button>
+        <div id="corsResult"></div>
+    </div>
+
+    <div>
+        <h2>Test Products API</h2>
+        <button id="testProductsBtn">Test Products API</button>
+        <div id="productsResult"></div>
+    </div>
+
+    <script>
+        document.getElementById('testCorsBtn').addEventListener('click', async () => {
+            const resultDiv = document.getElementById('corsResult');
+            resultDiv.innerHTML = '<p>Testing CORS endpoint...</p>';
+            
+            try {
+                const response = await fetch('http://localhost/giggles-tea/api/test_cors.php', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                resultDiv.innerHTML = `
+                    <p class="success">CORS Test Successful!</p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <p class="error">CORS Test Failed!</p>
+                    <pre>${error.toString()}</pre>
+                `;
+            }
+        });
+
+        document.getElementById('testProductsBtn').addEventListener('click', async () => {
+            const resultDiv = document.getElementById('productsResult');
+            resultDiv.innerHTML = '<p>Testing Products API...</p>';
+            
+            try {
+                const response = await fetch('http://localhost/giggles-tea/api/products.php?page=1&limit=2', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                resultDiv.innerHTML = `
+                    <p class="success">Products API Test Successful!</p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <p class="error">Products API Test Failed!</p>
+                    <pre>${error.toString()}</pre>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,4 +1,5 @@
 import BaseModel from './BaseModel';
+import React from 'react';
 
 class Product extends BaseModel {
   constructor() {

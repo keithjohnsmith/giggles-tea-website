@@ -1,0 +1,924 @@
+[
+  {
+    "id": "21045",
+    "name": "The Emperor's 7 Treasures",
+    "germanName": "Des Kaisers 7 Kostbarkeiten",
+    "category": "Schwarzer Tee",
+    "category_en": "Black Tea",
+    "price": 14.99,
+    "images": [
+      "Tea Catalogue/21045/22855.jpg",
+      "Tea Catalogue/21045/21045.jpg",
+      "Tea Catalogue/21045/22855-DE.jpg",
+      "Tea Catalogue/21045/22855-EN.jpg",
+      "Tea Catalogue/21045/21045-G350.jpg",
+      "Tea Catalogue/21045/21045-PKBL_7Kost.jpg",
+      "Tea Catalogue/21045/21045-G50_7Kostb.jpg",
+      "Tea Catalogue/21045/21045-G50.jpg",
+      "Tea Catalogue/21045/Pyramiden_G50.jpg",
+      "Tea Catalogue/21045/Teepostkarten_2.jpg",
+      "Tea Catalogue/21045/Teepostkarten_3.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22898",
+    "name": "Fennel Anise Caraway",
+    "germanName": "Fenchel Anis Kümmel",
+    "category": "Kräutertee",
+    "category_en": "Herbal Tea",
+    "price": 12.99,
+    "images": [
+      "Tea Catalogue/22898/22898.jpg",
+      "Tea Catalogue/22898/221610.jpg",
+      "Tea Catalogue/22898/21610-G50_Fenchel.jpg",
+      "Tea Catalogue/22898/21610_G50.jpg",
+      "Tea Catalogue/22898/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22920",
+    "name": "Peppermint",
+    "germanName": "Pfefferminze",
+    "category": "Kräutertee",
+    "category_en": "Herbal Tea",
+    "price": 12.99,
+    "images": [
+      "Tea Catalogue/22920/22920.jpg",
+      "Tea Catalogue/22920/21163.jpg",
+      "Tea Catalogue/22920/21163-G50_Pfeffer.jpg",
+      "Tea Catalogue/22920/21163-G50.jpg",
+      "Tea Catalogue/22920/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "21024",
+    "name": "Orange Dream",
+    "germanName": "Apfelsinen Traum",
+    "category": "Früchtetee",
+    "category_en": "Fruit Tea",
+    "price": 12.99,
+    "images": [
+      "Tea Catalogue/21024/21024.jpg",
+      "Tea Catalogue/21024/21666.jpg",
+      "Tea Catalogue/21024/21666-G50_Apfelsinen.jpg",
+      "Tea Catalogue/21024/21666-G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22939",
+    "name": "East Frisian Sunday Tea",
+    "germanName": "Ostfriesischer Sonntagstee",
+    "category": "Schwarzer Tee",
+    "category_en": "Black Tea",
+    "price": 14.99,
+    "images": [
+      "Tea Catalogue/22939/22939.jpg",
+      "Tea Catalogue/22939/21174.jpg",
+      "Tea Catalogue/22939/21174-G50_Ostfriesisch.jpg",
+      "Tea Catalogue/22939/21174-G50.jpg",
+      "Tea Catalogue/22939/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22762",
+    "name": "Sweet Sin",
+    "germanName": "Süße Sünde",
+    "category": "Früchtetee",
+    "category_en": "Fruit Tea",
+    "price": 12.99,
+    "images": [
+      "Tea Catalogue/22762/22762.jpg",
+      "Tea Catalogue/22762/21172.jpg",
+      "Tea Catalogue/22762/21173-G50_Suesse_.jpg",
+      "Tea Catalogue/22762/1836_Pyramide.jpg",
+      "Tea Catalogue/22762/21172-PKBL_Suesse_.jpg",
+      "Tea Catalogue/22762/21172-G50.jpg",
+      "Tea Catalogue/22762/Pyramiden_G50.jpg",
+      "Tea Catalogue/22762/Teepostkarten_3.jpg",
+      "Tea Catalogue/22762/Teepostkarten_2.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22700",
+    "name": "Windhuk Vanilla",
+    "germanName": "Windhuk Vanille",
+    "category": "Rooibos Tee",
+    "category_en": "Rooibos Tea",
+    "price": 13.99,
+    "images": [
+      "Tea Catalogue/22700/22700.jpg",
+      "Tea Catalogue/22700/21164.jpg",
+      "Tea Catalogue/22700/21164-G50_Windhu.jpg",
+      "Tea Catalogue/22700/1836_Pyramide.jpg",
+      "Tea Catalogue/22700/21164-G50.jpg",
+      "Tea Catalogue/22700/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22789",
+    "name": "Advent",
+    "germanName": "Advent",
+    "category": "Früchtetee",
+    "category_en": "Fruit Tea",
+    "price": 12.99,
+    "images": [
+      "Tea Catalogue/22789/22789.jpg",
+      "Tea Catalogue/22789/21281.jpg",
+      "Tea Catalogue/22789/22789-DE.jpg",
+      "Tea Catalogue/22789/22789-EN.jpg",
+      "Tea Catalogue/22789/22789-DE.png",
+      "Tea Catalogue/22789/21281-G50-Rausche.jpg",
+      "Tea Catalogue/22789/1836_Pyramide.jpg",
+      "Tea Catalogue/22789/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22858",
+    "name": "Women's Tea",
+    "germanName": "Frauentee",
+    "category": "Früchtetee",
+    "category_en": "Fruit Tea",
+    "price": 12.99,
+    "images": [
+      "Tea Catalogue/22858/22858.jpg",
+      "Tea Catalogue/22858/21667.jpg",
+      "Tea Catalogue/22858/21667-G50_Frauentee.jpg",
+      "Tea Catalogue/22858/21667-G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22866",
+    "name": "Grandma's Garden",
+    "germanName": "Omas Garten",
+    "category": "Kräutertee",
+    "category_en": "Herbal Tea",
+    "price": 12.99,
+    "images": [
+      "Tea Catalogue/22866/22866.jpg",
+      "Tea Catalogue/22866/21048.jpg",
+      "Tea Catalogue/22866/22866-DE.jpg",
+      "Tea Catalogue/22866/22866-EN.jpg",
+      "Tea Catalogue/22866/21048-G150.jpg",
+      "Tea Catalogue/22866/21048-G250.jpg",
+      "Tea Catalogue/22866/21048-G50_Omas.jpg",
+      "Tea Catalogue/22866/21048-G50.jpg",
+      "Tea Catalogue/22866/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22751",
+    "name": "Gingerbread Orange",
+    "germanName": "Pfeffermuss Orange",
+    "category": "Früchtetee",
+    "category_en": "Fruit Tea",
+    "price": 12.99,
+    "images": [
+      "Tea Catalogue/22751/22751.jpg",
+      "Tea Catalogue/22751/21167.jpg",
+      "Tea Catalogue/22751/22751-DE2023.jpg",
+      "Tea Catalogue/22751/22751_EN2023.jpg",
+      "Tea Catalogue/22751/21167-G50_RB_Pfeff.jpg",
+      "Tea Catalogue/22751/21167-G50.jpg",
+      "Tea Catalogue/22751/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22708",
+    "name": "Pure Rooibos",
+    "germanName": "Pur Rotbusch",
+    "category": "Rooibos Tee",
+    "category_en": "Rooibos Tea",
+    "price": 13.99,
+    "images": [
+      "Tea Catalogue/22708/22708.jpg",
+      "Tea Catalogue/22708/21283.jpg",
+      "Tea Catalogue/22708/22708-DE2023.jpg",
+      "Tea Catalogue/22708/22708-EN.jpg",
+      "Tea Catalogue/22708/21283-G350.jpg",
+      "Tea Catalogue/22708/21283-G-50_RB_Pyr.jpg",
+      "Tea Catalogue/22708/21283-G50.jpg",
+      "Tea Catalogue/22708/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22915-2",
+    "name": "Camomile",
+    "germanName": "Kamille",
+    "category": "Kräutertee",
+    "category_en": "Herbal Tea",
+    "price": 12.99,
+    "images": [
+      "Tea Catalogue/22915-2/22915.jpg",
+      "Tea Catalogue/22915-2/21173.jpg",
+      "Tea Catalogue/22915-2/21173-G150.jpg",
+      "Tea Catalogue/22915-2/21173-G250.jpg",
+      "Tea Catalogue/22915-2/21173-G50_Kamille_.jpg",
+      "Tea Catalogue/22915-2/21173-G50.jpg",
+      "Tea Catalogue/22915-2/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22861",
+    "name": "Ginger Fresh Tea",
+    "germanName": "Ingwer-Frisch-Tee",
+    "category": "Kräutertee",
+    "category_en": "Herbal Tea",
+    "price": 12.99,
+    "images": [
+      "Tea Catalogue/22861/22861.jpg",
+      "Tea Catalogue/22861/21051.jpg",
+      "Tea Catalogue/22861/22861-DE.jpg",
+      "Tea Catalogue/22861/22861-EN.jpg",
+      "Tea Catalogue/22861/21051-G350.jpg",
+      "Tea Catalogue/22861/21051-G150.jpg",
+      "Tea Catalogue/22861/21051-G250.jpg",
+      "Tea Catalogue/22861/21051-G50_Ingwer-.jpg",
+      "Tea Catalogue/22861/21051_PKBL_Ingwer.jpg",
+      "Tea Catalogue/22861/21051-G50.jpg",
+      "Tea Catalogue/22861/Pyramiden_G50.jpg",
+      "Tea Catalogue/22861/Teepostkarten_3.jpg",
+      "Tea Catalogue/22861/Teepostkarten_2.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22847",
+    "name": "Cool Mint",
+    "germanName": "Kühle Minze",
+    "category": "Kräutertee",
+    "category_en": "Herbal Tea",
+    "price": 12.99,
+    "images": [
+      "Tea Catalogue/22847/22847.jpg",
+      "Tea Catalogue/22847/21064.jpg",
+      "Tea Catalogue/22847/22847-DE.jpg",
+      "Tea Catalogue/22847/22847-EN.jpg",
+      "Tea Catalogue/22847/21064-G150.jpg",
+      "Tea Catalogue/22847/21064-G250.jpg",
+      "Tea Catalogue/22847/21064-G50_CoolMi.jpg",
+      "Tea Catalogue/22847/21064-G50.jpg",
+      "Tea Catalogue/22847/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22701",
+    "name": "Caramel",
+    "germanName": "Karamell",
+    "category": "Rooibos Tee",
+    "category_en": "Rooibos Tea",
+    "price": 13.99,
+    "images": [
+      "Tea Catalogue/22701/22701.jpg",
+      "Tea Catalogue/22701/21232.jpg",
+      "Tea Catalogue/22701/21232-G50_Karame.jpg",
+      "Tea Catalogue/22701/1836_Pyramide.jpg",
+      "Tea Catalogue/22701/21232-G50_RB_Ker.jpg",
+      "Tea Catalogue/22701/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22695",
+    "name": "Sea Buckthorn",
+    "germanName": "Sanddorn",
+    "category": "Früchtetee",
+    "category_en": "Fruit Tea",
+    "price": 12.99,
+    "images": [
+      "Tea Catalogue/22695/22695.jpg",
+      "Tea Catalogue/22695/21168.jpg",
+      "Tea Catalogue/22695/21168-G50_Sanddorr.jpg",
+      "Tea Catalogue/22695/21168-G50.jpg",
+      "Tea Catalogue/22695/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22845",
+    "name": "Bad Weather Tea",
+    "germanName": "Schlechtwettertee",
+    "category": "Früchtetee",
+    "category_en": "Fruit Tea",
+    "price": 12.99,
+    "images": [
+      "Tea Catalogue/22845/22845.jpg",
+      "Tea Catalogue/22845/21160.jpg",
+      "Tea Catalogue/22845/21160-G50_Schlecht.jpg",
+      "Tea Catalogue/22845/21160-G50.jpg",
+      "Tea Catalogue/22845/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22508",
+    "name": "China Jasmine Tea",
+    "germanName": "Grüner Tee Jasmin",
+    "category": "Grüner Tee",
+    "category_en": "Green Tea",
+    "price": 14.99,
+    "images": [
+      "Tea Catalogue/22508/22508.jpg",
+      "Tea Catalogue/22508/21066.jpg",
+      "Tea Catalogue/22508/22508-DE2023.jpg",
+      "Tea Catalogue/22508/21066-G150.jpg",
+      "Tea Catalogue/22508/21066-G350.jpg",
+      "Tea Catalogue/22508/21066-G250.jpg",
+      "Tea Catalogue/22508/21066-G50_Jasmin.jpg",
+      "Tea Catalogue/22508/21066-G50.jpg",
+      "Tea Catalogue/22508/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22560",
+    "name": "Green Tea Sakura",
+    "germanName": "Grüner Tee Sakura",
+    "category": "Grüner Tee",
+    "category_en": "Green Tea",
+    "price": 14.99,
+    "images": [
+      "Tea Catalogue/22560/22560.jpg",
+      "Tea Catalogue/22560/21284.jpg",
+      "Tea Catalogue/22560/22560-DE.jpg",
+      "Tea Catalogue/22560/22560-EN.jpg",
+      "Tea Catalogue/22560/21284-G50_Sencha.jpg",
+      "Tea Catalogue/22560/21284-G50.jpg",
+      "Tea Catalogue/22560/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22555",
+    "name": "Bora Bora",
+    "germanName": "Bora Bora",
+    "category": "Schwarzer Tee",
+    "category_en": "Black Tea",
+    "price": 14.99,
+    "images": [
+      "Tea Catalogue/22555/22555.jpg",
+      "Tea Catalogue/22555/21286.jpg",
+      "Tea Catalogue/22555/22555-DE2023.jpg",
+      "Tea Catalogue/22555/21286-G150.jpg",
+      "Tea Catalogue/22555/21286-G50_BoraBor.jpg",
+      "Tea Catalogue/22555/21286-G50.jpg",
+      "Tea Catalogue/22555/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22497",
+    "name": "English Breakfast",
+    "germanName": "Schwarzer Tee English Breakfast",
+    "category": "Schwarzer Tee",
+    "category_en": "Black Tea",
+    "price": 14.99,
+    "images": [
+      "Tea Catalogue/22497/22497.jpg",
+      "Tea Catalogue/22497/21041.jpg",
+      "Tea Catalogue/22497/22497-DE.jpg",
+      "Tea Catalogue/22497/21041-G150.jpg",
+      "Tea Catalogue/22497/21041-G250.jpg",
+      "Tea Catalogue/22497/21041-G350.jpg",
+      "Tea Catalogue/22497/21041-G50_English_.jpg",
+      "Tea Catalogue/22497/21041-PKBL_English_.jpg",
+      "Tea Catalogue/22497/21041-G50.jpg",
+      "Tea Catalogue/22497/Pyramiden_G50.jpg",
+      "Tea Catalogue/22497/Teepostkarten_2.jpg",
+      "Tea Catalogue/22497/Teepostkarten_3.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22608A",
+    "name": "Temple of Heaven",
+    "germanName": "Tempel des Himmels",
+    "category": "Grüner Tee",
+    "category_en": "Green Tea",
+    "price": 14.99,
+    "images": [
+      "Tea Catalogue/22608A/22608A.jpg",
+      "Tea Catalogue/22608A/21282.jpg",
+      "Tea Catalogue/22608A/22608A-DE.jpg",
+      "Tea Catalogue/22608A/22608A-EN.jpg",
+      "Tea Catalogue/22608A/21282-G50_Temple_.jpg",
+      "Tea Catalogue/22608A/21282-G50.jpg",
+      "Tea Catalogue/22608A/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22667",
+    "name": "Rhubarb Cream",
+    "germanName": "Rhabarber Sahne",
+    "category": "Früchtetee",
+    "category_en": "Fruit Tea",
+    "price": 12.99,
+    "images": [
+      "Tea Catalogue/22667/22667.jpg",
+      "Tea Catalogue/22667/21169.jpg",
+      "Tea Catalogue/22667/22667-DE.jpg",
+      "Tea Catalogue/22667/22667-EN.jpg",
+      "Tea Catalogue/22667/21169-G50_Rhabarb.jpg",
+      "Tea Catalogue/22667/21169-G50.jpg",
+      "Tea Catalogue/22667/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22493",
+    "name": "Margaret's Hope",
+    "germanName": "Margaret's Hope",
+    "category": "Schwarzer Tee",
+    "category_en": "Black Tea",
+    "price": 14.99,
+    "images": [
+      "Tea Catalogue/22493/22493_st.jpg",
+      "Tea Catalogue/22493/21040.jpg",
+      "Tea Catalogue/22493/22493-DE.jpg",
+      "Tea Catalogue/22493/22493-EN.jpg",
+      "Tea Catalogue/22493/21040-G50_Darjeeli.jpg",
+      "Tea Catalogue/22493/21040-PKBL_Marga.jpg",
+      "Tea Catalogue/22493/21040-G50.jpg",
+      "Tea Catalogue/22493/Pyramiden_G50.jpg",
+      "Tea Catalogue/22493/Teepostkarten_2.jpg",
+      "Tea Catalogue/22493/Teepostkarten_3.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22338",
+    "name": "Orange Grapefruit",
+    "germanName": "Orange Grapefruit",
+    "category": "Früchtetee",
+    "category_en": "Fruit Tea",
+    "price": 12.99,
+    "images": [
+      "Tea Catalogue/22338/22338.jpg",
+      "Tea Catalogue/22338/21159.jpg",
+      "Tea Catalogue/22338/21159-G250.jpg",
+      "Tea Catalogue/22338/21159-G150.jpg",
+      "Tea Catalogue/22338/21159-G50_Orange_.jpg",
+      "Tea Catalogue/22338/21159-PKBL_Orange_.jpg",
+      "Tea Catalogue/22338/21159-G50.jpg",
+      "Tea Catalogue/22338/Pyramiden_G50.jpg",
+      "Tea Catalogue/22338/Teepostkarten_3.jpg",
+      "Tea Catalogue/22338/Teepostkarten_2.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22564",
+    "name": "Turkish Apple",
+    "germanName": "Türkischer Apfel",
+    "category": "Früchtetee",
+    "category_en": "Fruit Tea",
+    "price": 12.99,
+    "images": [
+      "Tea Catalogue/22564/22564.jpg",
+      "Tea Catalogue/22564/21166.jpg",
+      "Tea Catalogue/22564/22564-DE.jpg",
+      "Tea Catalogue/22564/22564-EN.jpg",
+      "Tea Catalogue/22564/21166-G50_Tuerk_A.jpg",
+      "Tea Catalogue/22564/21166-G50.jpg",
+      "Tea Catalogue/22564/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22453",
+    "name": "Ceylon",
+    "germanName": "Ceylon",
+    "category": "Schwarzer Tee",
+    "category_en": "Black Tea",
+    "price": 14.99,
+    "images": [
+      "Tea Catalogue/22453/22453.jpg",
+      "Tea Catalogue/22453/21195.jpg",
+      "Tea Catalogue/22453/21195_G-50_Ceylon.jpg",
+      "Tea Catalogue/22453/21195-G50.jpg",
+      "Tea Catalogue/22453/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22470",
+    "name": "Fukuyu Sencha",
+    "germanName": "Fukuyu Sencha",
+    "category": "Grüner Tee",
+    "category_en": "Green Tea",
+    "price": 14.99,
+    "images": [
+      "Tea Catalogue/22470/22470.jpg",
+      "Tea Catalogue/22470/21042.jpg",
+      "Tea Catalogue/22470/22470-DE.jpg",
+      "Tea Catalogue/22470/21042-G250.jpg",
+      "Tea Catalogue/22470/21042-G150.jpg",
+      "Tea Catalogue/22470/21042-G350.jpg",
+      "Tea Catalogue/22470/21042-G50_Fukuyu.jpg",
+      "Tea Catalogue/22470/21042-G50.jpg",
+      "Tea Catalogue/22470/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22556-2",
+    "name": "Angel's Kiss",
+    "germanName": "Engelskuss",
+    "category": "Früchtetee",
+    "category_en": "Fruit Tea",
+    "price": 12.99,
+    "images": [
+      "Tea Catalogue/22556-2/22556.jpg",
+      "Tea Catalogue/22556-2/21044.jpg",
+      "Tea Catalogue/22556-2/22556-DE.jpg",
+      "Tea Catalogue/22556-2/21044-G350.jpg",
+      "Tea Catalogue/22556-2/21044-G50_Engelsk.jpg",
+      "Tea Catalogue/22556-2/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22400",
+    "name": "Earl Grey",
+    "germanName": "Earl Grey",
+    "category": "Schwarzer Tee",
+    "category_en": "Black Tea",
+    "price": 14.99,
+    "images": [
+      "Tea Catalogue/22400/22400.jpg",
+      "Tea Catalogue/22400/21063.jpg",
+      "Tea Catalogue/22400/22400-DE.jpg",
+      "Tea Catalogue/22400/21063-G350.jpg",
+      "Tea Catalogue/22400/21063-G150.jpg",
+      "Tea Catalogue/22400/21063-G250.jpg",
+      "Tea Catalogue/22400/21063-G50_EarlGre.jpg",
+      "Tea Catalogue/22400/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22435",
+    "name": "Sencha Lemon",
+    "germanName": "Sencha Zitrone",
+    "category": "Grüner Tee",
+    "category_en": "Green Tea",
+    "price": 14.99,
+    "images": [
+      "Tea Catalogue/22435/22435.jpg",
+      "Tea Catalogue/22435/21043.jpg",
+      "Tea Catalogue/22435/22435-DE.jpg",
+      "Tea Catalogue/22435/22435-EN.jpg",
+      "Tea Catalogue/22435/21043-G50.jpg",
+      "Tea Catalogue/22435/21043-G250.jpg",
+      "Tea Catalogue/22435/21043-G150.jpg",
+      "Tea Catalogue/22435/21043-G350.jpg",
+      "Tea Catalogue/22435/21043-G50_Sencha_.jpg",
+      "Tea Catalogue/22435/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22520",
+    "name": "Orange Blossom",
+    "germanName": "Orangenblüte",
+    "category": "Früchtetee",
+    "category_en": "Fruit Tea",
+    "price": 12.99,
+    "images": [
+      "Tea Catalogue/22520/22520_neu_frei_bei.jpg",
+      "Tea Catalogue/22520/21170.jpg",
+      "Tea Catalogue/22520/22520-DE.jpg",
+      "Tea Catalogue/22520/22520-EN.jpg",
+      "Tea Catalogue/22520/21170-G50_ST_Oran.jpg",
+      "Tea Catalogue/22520/21170-G50.jpg",
+      "Tea Catalogue/22520/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22184",
+    "name": "Pitta",
+    "germanName": "Pitta",
+    "category": "Ayurveda",
+    "category_en": "Ayurveda",
+    "price": 11.99,
+    "images": [
+      "Tea Catalogue/22184/21184_bio.jpg",
+      "Tea Catalogue/22184/21588.jpg",
+      "Tea Catalogue/22184/21588-G50_Pitta_Py.jpg",
+      "Tea Catalogue/22184/21588-G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22183",
+    "name": "Vata",
+    "germanName": "Vata",
+    "category": "Ayurveda",
+    "category_en": "Ayurveda",
+    "price": 11.99,
+    "images": [
+      "Tea Catalogue/22183/21183_bio.jpg",
+      "Tea Catalogue/22183/21587.jpg",
+      "Tea Catalogue/22183/21587-G50_Vata_Py.jpg",
+      "Tea Catalogue/22183/21587-G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "2218",
+    "name": "Fairground Almond",
+    "germanName": "Kirmesmandeln",
+    "category": "Rooibos Tee",
+    "category_en": "Rooibos Tea",
+    "price": 13.99,
+    "images": [
+      "Tea Catalogue/2218/22218.jpg",
+      "Tea Catalogue/2218/21049.jpg",
+      "Tea Catalogue/2218/22218-DE.jpg",
+      "Tea Catalogue/2218/22218-EN.jpg",
+      "Tea Catalogue/2218/21049-G50_Kirmes.jpg",
+      "Tea Catalogue/2218/21049-G50.jpg",
+      "Tea Catalogue/2218/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22240",
+    "name": "Red Bush Fire",
+    "germanName": "Rotbusch Feuer",
+    "category": "Rooibos Tee",
+    "category_en": "Rooibos Tea",
+    "price": 13.99,
+    "images": [
+      "Tea Catalogue/22240/22240.jpg",
+      "Tea Catalogue/22240/21047.jpg",
+      "Tea Catalogue/22240/21047-G150.jpg",
+      "Tea Catalogue/22240/21047-G250.jpg",
+      "Tea Catalogue/22240/21047-G350.jpg",
+      "Tea Catalogue/22240/21047-G50_RB-Feu.jpg",
+      "Tea Catalogue/22240/21047-G50.jpg",
+      "Tea Catalogue/22240/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22241",
+    "name": "Vanilla",
+    "germanName": "Vanille",
+    "category": "Rooibos Tee",
+    "category_en": "Rooibos Tea",
+    "price": 13.99,
+    "images": [
+      "Tea Catalogue/22241/22421_1.jpg",
+      "Tea Catalogue/22241/21046.jpg",
+      "Tea Catalogue/22241/22421-DE.jpg",
+      "Tea Catalogue/22241/22421-EN.jpg",
+      "Tea Catalogue/22241/21046-G50_STVanill.jpg",
+      "Tea Catalogue/22241/21046-G50.jpg",
+      "Tea Catalogue/22241/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22222",
+    "name": "Palais Royal",
+    "germanName": "Palais Royal",
+    "category": "Schwarzer Tee",
+    "category_en": "Black Tea",
+    "price": 14.99,
+    "images": [
+      "Tea Catalogue/22222/22222.jpg",
+      "Tea Catalogue/22222/21609.jpg",
+      "Tea Catalogue/22222/21609_G50.jpg",
+      "Tea Catalogue/22222/21609-G50_Palais_.jpg",
+      "Tea Catalogue/22222/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22063",
+    "name": "Milky Oolong",
+    "germanName": "Milky Oolong",
+    "category": "Oolong Tee",
+    "category_en": "Oolong Tea",
+    "price": 14.99,
+    "images": [
+      "Tea Catalogue/22063/22063_1.jpg",
+      "Tea Catalogue/22063/21287.jpg",
+      "Tea Catalogue/22063/22063-DE.jpg",
+      "Tea Catalogue/22063/21287-G50_MilkyOo.jpg",
+      "Tea Catalogue/22063/21287-G50_.jpg",
+      "Tea Catalogue/22063/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22122",
+    "name": "Winter Punch",
+    "germanName": "Winterpunsch",
+    "category": "Früchtetee",
+    "category_en": "Fruit Tea",
+    "price": 12.99,
+    "images": [
+      "Tea Catalogue/22122/22122.gif",
+      "Tea Catalogue/22122/21050.jpg",
+      "Tea Catalogue/22122/22122-DE.jpg",
+      "Tea Catalogue/22122/22122-EN.jpg",
+      "Tea Catalogue/22122/21050-G150.jpg",
+      "Tea Catalogue/22122/21050-G350.jpg",
+      "Tea Catalogue/22122/1836_Pyramide.jpg",
+      "Tea Catalogue/22122/21050-G50.jpg",
+      "Tea Catalogue/22122/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22414",
+    "name": "Green Mint",
+    "germanName": "Grüner Tee Minze",
+    "category": "Grüner Tee",
+    "category_en": "Green Tea",
+    "price": 14.99,
+    "images": [
+      "Tea Catalogue/22414/22414.jpg",
+      "Tea Catalogue/22414/21280.jpg",
+      "Tea Catalogue/22414/22414-DE.jpg",
+      "Tea Catalogue/22414/22414-EN.jpg",
+      "Tea Catalogue/22414/21280-G150.jpg",
+      "Tea Catalogue/22414/21280-G250.jpg",
+      "Tea Catalogue/22414/21280-G50_Gruene_.jpg",
+      "Tea Catalogue/22414/21280-G50.jpg",
+      "Tea Catalogue/22414/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22455A",
+    "name": "East Frisian",
+    "germanName": "Ostfriesen",
+    "category": "Schwarzer Tee",
+    "category_en": "Black Tea",
+    "price": 14.99,
+    "images": [
+      "Tea Catalogue/22455A/22455A.jpg",
+      "Tea Catalogue/22455A/21175.jpg",
+      "Tea Catalogue/22455A/22455A-D24.jpg",
+      "Tea Catalogue/22455A/21175-G50_Ostfries_.jpg",
+      "Tea Catalogue/22455A/21175-G50.jpg",
+      "Tea Catalogue/22455A/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "21186",
+    "name": "Yoga Tea",
+    "germanName": "Yoga Tee",
+    "category": "Ayurveda",
+    "category_en": "Ayurveda",
+    "price": 11.99,
+    "images": [
+      "Tea Catalogue/21186/21186_bio.jpg",
+      "Tea Catalogue/21186/21590.jpg",
+      "Tea Catalogue/21186/21590-G50_Yoga_Te.jpg",
+      "Tea Catalogue/21186/21590-G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "21182",
+    "name": "Kapha",
+    "germanName": "Kapha",
+    "category": "Ayurveda",
+    "category_en": "Ayurveda",
+    "price": 11.99,
+    "images": [
+      "Tea Catalogue/21182/21182_bio.jpg",
+      "Tea Catalogue/21182/21589.jpg",
+      "Tea Catalogue/21182/21589-G50_Kapha_.jpg",
+      "Tea Catalogue/21182/21589-G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22021",
+    "name": "Cloud Catcher",
+    "germanName": "Wolkenfänger",
+    "category": "Rooibos Tee",
+    "category_en": "Rooibos Tea",
+    "price": 13.99,
+    "images": [
+      "Tea Catalogue/22021/22021.jpg",
+      "Tea Catalogue/22021/21285.jpg",
+      "Tea Catalogue/22021/22021-DE.jpg",
+      "Tea Catalogue/22021/22021-EN.jpg",
+      "Tea Catalogue/22021/21285-G50_Wolkens.jpg",
+      "Tea Catalogue/22021/21285-PKBL_Wolken.jpg",
+      "Tea Catalogue/22021/21285-G50.jpg",
+      "Tea Catalogue/22021/Pyramiden_G50.jpg",
+      "Tea Catalogue/22021/Teepostkarten_3.jpg",
+      "Tea Catalogue/22021/Teepostkarten_2.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "21041",
+    "name": "Bitter Lemonade",
+    "germanName": "Bitterlimonade",
+    "category": "Früchtetee",
+    "category_en": "Fruit Tea",
+    "price": 12.99,
+    "images": [
+      "Tea Catalogue/21041/21141.jpg",
+      "Tea Catalogue/21041/21343.jpg",
+      "Tea Catalogue/21041/21141_DE2023.jpg",
+      "Tea Catalogue/21041/21141_EN2023.jpg",
+      "Tea Catalogue/21041/21343-G150.jpg",
+      "Tea Catalogue/21041/21343-G250.jpg",
+      "Tea Catalogue/21041/21343-G50_Bitterli.jpg",
+      "Tea Catalogue/21041/21343-G50.jpg",
+      "Tea Catalogue/21041/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  },
+  {
+    "id": "22048",
+    "name": "Assam",
+    "germanName": "Assam",
+    "category": "Schwarzer Tee",
+    "category_en": "Black Tea",
+    "price": 14.99,
+    "images": [
+      "Tea Catalogue/22048/22048_1.jpg",
+      "Tea Catalogue/22048/21065.jpg",
+      "Tea Catalogue/22048/22048-DE.jpg",
+      "Tea Catalogue/22048/22048-EN.jpg",
+      "Tea Catalogue/22048/21065-G50_Assam_.jpg",
+      "Tea Catalogue/22048/21065-G50.jpg",
+      "Tea Catalogue/22048/Pyramiden_G50.jpg"
+    ],
+    "description": "",
+    "isActive": true
+  }
+]

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Fixed Products API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #4a5568;
+        }
+        button {
+            background-color: #4299e1;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        button:hover {
+            background-color: #3182ce;
+        }
+        pre {
+            background-color: #f7fafc;
+            border: 1px solid #e2e8f0;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .success {
+            color: #2f855a;
+            font-weight: bold;
+        }
+        .error {
+            color: #c53030;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Fixed Products API</h1>
+    
+    <div>
+        <button id="testOriginalApi">Test Original Products API</button>
+        <button id="testFixedApi">Test Fixed Products API</button>
+        <button id="testSimpleApi">Test Simple Products API</button>
+    </div>
+    
+    <h2>Results:</h2>
+    <div id="results">
+        <p>Click a button to test the API</p>
+    </div>
+    
+    <script>
+        document.getElementById('testOriginalApi').addEventListener('click', () => {
+            testApi('http://localhost/giggles-tea/server/api/products', 'Original Products API');
+        });
+        
+        document.getElementById('testFixedApi').addEventListener('click', () => {
+            testApi('http://localhost/giggles-tea/server/api/products_fixed', 'Fixed Products API');
+        });
+        
+        document.getElementById('testSimpleApi').addEventListener('click', () => {
+            testApi('http://localhost/giggles-tea/server/api/products_simple', 'Simple Products API');
+        });
+        
+        function testApi(url, apiName) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = `<p>Testing ${apiName}...</p>`;
+            
+            // Use a new fetch for each test to avoid stream already read errors
+            fetch(url)
+                .then(response => {
+                    const status = response.status;
+                    const headers = {};
+                    
+                    for (const [key, value] of response.headers.entries()) {
+                        headers[key] = value;
+                    }
+                    
+                    // Clone the response to use for text if JSON parsing fails
+                    const responseClone = response.clone();
+                    
+                    return response.json()
+                        .then(data => {
+                            resultsDiv.innerHTML = `
+                                <p class="success">Status: Success</p>
+                                <p>API: ${apiName}</p>
+                                <p>Response Status: ${status}</p>
+                                <h3>Headers:</h3>
+                                <pre>${JSON.stringify(headers, null, 2)}</pre>
+                                <h3>Data:</h3>
+                                <pre>${JSON.stringify(data, null, 2)}</pre>
+                            `;
+                        })
+                        .catch(jsonError => {
+                            // Use the cloned response for text
+                            return responseClone.text().then(text => {
+                                resultsDiv.innerHTML = `
+                                    <p class="error">Status: Error</p>
+                                    <p>API: ${apiName}</p>
+                                    <p>Response Status: ${status}</p>
+                                    <p>Error: ${jsonError.message}</p>
+                                    <h3>Headers:</h3>
+                                    <pre>${JSON.stringify(headers, null, 2)}</pre>
+                                    <h3>Raw Response:</h3>
+                                    <pre>${text}</pre>
+                                `;
+                            });
+                        });
+                })
+                .catch(error => {
+                    resultsDiv.innerHTML = `
+                        <p class="error">Status: Error</p>
+                        <p>API: ${apiName}</p>
+                        <p>Error: ${error.message}</p>
+                    `;
+                });
+        }
+    </script>
+</body>
+</html>

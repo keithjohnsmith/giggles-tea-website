@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "name": "Earl Grey",
+    "description": "A classic black tea with bergamot oil for a distinctive citrus flavor.",
+    "price": 9.99,
+    "category": "Black Tea",
+    "image": "/images/earl-grey.jpg",
+    "featured": true,
+    "stock": 50
+  },
+  {
+    "id": 2,
+    "name": "Jasmine Green",
+    "description": "Green tea scented with jasmine flowers for a fragrant and soothing cup.",
+    "price": 12.99,
+    "category": "Green Tea",
+    "image": "/images/jasmine-green.jpg",
+    "featured": true,
+    "stock": 75
+  },
+  {
+    "id": 3,
+    "name": "Chamomile",
+    "description": "A caffeine-free herbal tea known for its calming properties.",
+    "price": 8.99,
+    "category": "Herbal Tea",
+    "image": "/images/chamomile.jpg",
+    "featured": true,
+    "stock": 100
+  }
+]

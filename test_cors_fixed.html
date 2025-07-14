@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORS Test - Fixed</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 10px 0;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>CORS Test - Fixed Version</h1>
+    <p>This page tests if the CORS issues have been resolved by removing duplicate headers.</p>
+    
+    <div>
+        <button id="testProducts">Test Products API</button>
+        <button id="testProductsWithQuery">Test Products API with Query Parameters</button>
+    </div>
+    
+    <h2>Results:</h2>
+    <pre id="results">Click a button to run tests...</pre>
+    
+    <script>
+        document.getElementById('testProducts').addEventListener('click', async () => {
+            const resultsElement = document.getElementById('results');
+            resultsElement.innerHTML = 'Testing Products API...';
+            
+            try {
+                const response = await fetch('http://localhost/giggles-tea/api/products.php');
+                const headers = {};
+                for (const [key, value] of response.headers.entries()) {
+                    headers[key] = value;
+                }
+                
+                const data = await response.json();
+                
+                resultsElement.innerHTML = `
+<span class="success">✓ Success! CORS headers working properly</span>
+
+Response Status: ${response.status} ${response.statusText}
+
+Headers:
+${JSON.stringify(headers, null, 2)}
+
+Data (first 100 chars):
+${JSON.stringify(data).substring(0, 100)}...
+`;
+            } catch (error) {
+                resultsElement.innerHTML = `
+<span class="error">✗ Error: ${error.message}</span>
+
+Check the console for more details.
+`;
+                console.error('Full error:', error);
+            }
+        });
+        
+        document.getElementById('testProductsWithQuery').addEventListener('click', async () => {
+            const resultsElement = document.getElementById('results');
+            resultsElement.innerHTML = 'Testing Products API with Query Parameters...';
+            
+            try {
+                const response = await fetch('http://localhost/giggles-tea/api/products.php?page=1&limit=10&isActive=true');
+                const headers = {};
+                for (const [key, value] of response.headers.entries()) {
+                    headers[key] = value;
+                }
+                
+                const data = await response.json();
+                
+                resultsElement.innerHTML = `
+<span class="success">✓ Success! CORS with query parameters working properly</span>
+
+Response Status: ${response.status} ${response.statusText}
+
+Headers:
+${JSON.stringify(headers, null, 2)}
+
+Data (first 100 chars):
+${JSON.stringify(data).substring(0, 100)}...
+`;
+            } catch (error) {
+                resultsElement.innerHTML = `
+<span class="error">✗ Error: ${error.message}</span>
+
+Check the console for more details.
+`;
+                console.error('Full error:', error);
+            }
+        });
+    </script>
+</body>
+</html>

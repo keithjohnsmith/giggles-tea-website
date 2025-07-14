@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import React from 'react';
 
 // Mock data - replace with API calls in production
 const mockCustomers = Array.from({ length: 20 }, (_, i) => ({

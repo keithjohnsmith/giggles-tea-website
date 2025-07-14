@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Headers</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 10px 0;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Headers</h1>
+    <p>This page tests what headers are being sent by the server.</p>
+    
+    <div>
+        <button id="testHeaders">Test Headers</button>
+    </div>
+    
+    <h2>Results:</h2>
+    <pre id="results">Click the button to run the test...</pre>
+    
+    <script>
+        document.getElementById('testHeaders').addEventListener('click', async () => {
+            const resultsElement = document.getElementById('results');
+            resultsElement.innerHTML = 'Testing headers...';
+            
+            try {
+                const response = await fetch('http://localhost/giggles-tea/test_headers.php');
+                const headers = {};
+                for (const [key, value] of response.headers.entries()) {
+                    headers[key] = value;
+                }
+                
+                const data = await response.json();
+                
+                resultsElement.innerHTML = `
+<span class="success">✓ Success!</span>
+
+Response Status: ${response.status} ${response.statusText}
+
+Headers from Response:
+${JSON.stringify(headers, null, 2)}
+
+Headers from Server (PHP):
+${JSON.stringify(data.headers, null, 2)}
+
+Server Info:
+${JSON.stringify(data.server_info, null, 2)}
+
+Apache Modules:
+${JSON.stringify(data.apache_modules, null, 2)}
+
+All Headers (Raw):
+${JSON.stringify(data.all_headers, null, 2)}
+`;
+            } catch (error) {
+                resultsElement.innerHTML = `
+<span class="error">✗ Error: ${error.message}</span>
+
+Check the console for more details.
+`;
+                console.error('Full error:', error);
+            }
+        });
+    </script>
+</body>
+</html>

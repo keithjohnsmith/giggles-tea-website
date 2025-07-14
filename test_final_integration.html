@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Integration Test - Giggles Tea</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #4CAF50;
+        }
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .error {
+            color: red;
+        }
+        .success {
+            color: green;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Final Integration Test - Giggles Tea</h1>
+    <p>This page tests the integration between the frontend and backend API with CORS support.</p>
+    
+    <div class="test-section">
+        <h2>1. Direct API Access Test</h2>
+        <button id="testDirectProducts">Test Products API with Query Parameters</button>
+        <div id="directStatus"></div>
+        <pre id="directOutput"></pre>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. Frontend Config Test</h2>
+        <p>Testing the frontend configuration with the updated baseUrl:</p>
+        <code id="configDisplay"></code>
+        <button id="testFrontendConfig">Test Frontend Config</button>
+        <div id="configStatus"></div>
+        <pre id="configOutput"></pre>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. Simulated Frontend API Call</h2>
+        <button id="testFrontendCall">Test Frontend API Call</button>
+        <div id="frontendStatus"></div>
+        <pre id="frontendOutput"></pre>
+    </div>
+    
+    <script>
+        // Test 1: Direct API Access
+        document.getElementById('testDirectProducts').addEventListener('click', async () => {
+            const statusEl = document.getElementById('directStatus');
+            const outputEl = document.getElementById('directOutput');
+            
+            statusEl.innerHTML = '<p>Testing direct API access with query parameters...</p>';
+            outputEl.textContent = '';
+            
+            try {
+                const url = 'http://localhost/giggles-tea/server/api/products.php?page=1&limit=10&isActive=true';
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    },
+                    mode: 'cors'
+                });
+                
+                // Clone the response to display headers
+                const responseClone = response.clone();
+                
+                // Display response headers
+                const headers = {};
+                responseClone.headers.forEach((value, key) => {
+                    headers[key] = value;
+                });
+                
+                let result = '';
+                result += `Status: ${response.status} ${response.statusText}\n\n`;
+                result += `Headers:\n${JSON.stringify(headers, null, 2)}\n\n`;
+                
+                try {
+                    const data = await response.json();
+                    result += `Data:\n${JSON.stringify(data, null, 2)}`;
+                    statusEl.innerHTML = '<p class="success">✅ Direct API access successful!</p>';
+                } catch (jsonError) {
+                    const text = await responseClone.text();
+                    result += `Raw Response:\n${text}`;
+                    statusEl.innerHTML = `<p class="error">❌ Error parsing JSON: ${jsonError.message}</p>`;
+                }
+                
+                outputEl.textContent = result;
+            } catch (error) {
+                statusEl.innerHTML = `<p class="error">❌ Error: ${error.message}</p>`;
+                outputEl.textContent = `Error: ${error.message}`;
+                console.error('Fetch error:', error);
+            }
+        });
+        
+        // Test 2: Frontend Config Test
+        document.getElementById('testFrontendConfig').addEventListener('click', async () => {
+            const statusEl = document.getElementById('configStatus');
+            const outputEl = document.getElementById('configOutput');
+            
+            statusEl.innerHTML = '<p>Testing frontend configuration...</p>';
+            outputEl.textContent = '';
+            
+            try {
+                // Simulate the frontend config
+                const config = {
+                    api: {
+                        baseUrl: 'http://localhost/giggles-tea/server/api',
+                        endpoints: {
+                            products: 'products.php',
+                            products_fixed: 'products_fixed.php',
+                            products_simple: 'products_simple.php'
+                        }
+                    }
+                };
+                
+                // Display the config
+                document.getElementById('configDisplay').textContent = 
+                    `baseUrl: ${config.api.baseUrl}, endpoints: ${JSON.stringify(config.api.endpoints)}`;
+                
+                // Test if we can construct valid URLs
+                const productsUrl = `${config.api.baseUrl}/${config.api.endpoints.products}?page=1&limit=10`;
+                const productsFixedUrl = `${config.api.baseUrl}/${config.api.endpoints.products_fixed}?page=1&limit=10`;
+                
+                let result = '';
+                result += `Products URL: ${productsUrl}\n`;
+                result += `Products Fixed URL: ${productsFixedUrl}\n\n`;
+                
+                // Test if URLs are accessible
+                const testUrl = productsUrl;
+                result += `Testing URL: ${testUrl}\n\n`;
+                
+                const response = await fetch(testUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    },
+                    mode: 'cors'
+                });
+                
+                result += `Status: ${response.status} ${response.statusText}\n\n`;
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    result += `Data:\n${JSON.stringify(data, null, 2)}`;
+                    statusEl.innerHTML = '<p class="success">✅ Frontend configuration test successful!</p>';
+                } else {
+                    result += `Error: ${response.statusText}`;
+                    statusEl.innerHTML = `<p class="error">❌ Frontend configuration test failed!</p>`;
+                }
+                
+                outputEl.textContent = result;
+            } catch (error) {
+                statusEl.innerHTML = `<p class="error">❌ Error: ${error.message}</p>`;
+                outputEl.textContent = `Error: ${error.message}`;
+                console.error('Config test error:', error);
+            }
+        });
+        
+        // Test 3: Simulated Frontend API Call
+        document.getElementById('testFrontendCall').addEventListener('click', async () => {
+            const statusEl = document.getElementById('frontendStatus');
+            const outputEl = document.getElementById('frontendOutput');
+            
+            statusEl.innerHTML = '<p>Simulating frontend API call...</p>';
+            outputEl.textContent = '';
+            
+            try {
+                // Simulate the frontend API call function
+                async function apiRequest(endpoint, params = {}) {
+                    const baseUrl = 'http://localhost/giggles-tea/server/api';
+                    
+                    // Build query string
+                    const queryParams = new URLSearchParams();
+                    for (const [key, value] of Object.entries(params)) {
+                        if (value !== undefined && value !== null) {
+                            queryParams.append(key, value);
+                        }
+                    }
+                    
+                    const queryString = queryParams.toString() ? `?${queryParams.toString()}` : '';
+                    const url = `${baseUrl}/${endpoint}${queryString}`;
+                    
+                    const options = {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        mode: 'cors'
+                    };
+                    
+                    const response = await fetch(url, options);
+                    
+                    if (!response.ok) {
+                        throw new Error(`API request failed: ${response.status} ${response.statusText}`);
+                    }
+                    
+                    return response.json();
+                }
+                
+                // Simulate a products API call
+                const result = await apiRequest('products.php', {
+                    page: 1,
+                    limit: 10,
+                    isActive: true
+                });
+                
+                statusEl.innerHTML = '<p class="success">✅ Frontend API call simulation successful!</p>';
+                outputEl.textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                statusEl.innerHTML = `<p class="error">❌ Error: ${error.message}</p>`;
+                outputEl.textContent = `Error: ${error.message}`;
+                console.error('API call error:', error);
+            }
+        });
+    </script>
+</body>
+</html>
