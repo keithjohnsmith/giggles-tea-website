@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Proxy Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .image-test {
+            display: inline-block;
+            margin: 10px;
+            text-align: center;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .image-test img {
+            max-width: 200px;
+            max-height: 200px;
+            display: block;
+            margin: 0 auto 10px;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Giggles Tea - Image Proxy Test</h1>
+    
+    <div class="test-section">
+        <h2>Test 1: Direct Image Proxy Access</h2>
+        <p>Testing known image files from the Tea Catalogue directory:</p>
+        
+        <div class="image-test">
+            <img src="/server/images.php?img=22762.jpg" 
+                 alt="Test Image 1" 
+                 onload="this.nextElementSibling.innerHTML = '<span class=success>✓ Loaded successfully</span>'"
+                 onerror="this.nextElementSibling.innerHTML = '<span class=error>✗ Failed to load</span>'">
+            <div>22762.jpg</div>
+        </div>
+        
+        <div class="image-test">
+            <img src="/server/images.php?img=21172.jpg" 
+                 alt="Test Image 2" 
+                 onload="this.nextElementSibling.innerHTML = '<span class=success>✓ Loaded successfully</span>'"
+                 onerror="this.nextElementSibling.innerHTML = '<span class=error>✗ Failed to load</span>'">
+            <div>21172.jpg</div>
+        </div>
+        
+        <div class="image-test">
+            <img src="/server/images.php?img=21172-G50.jpg" 
+                 alt="Test Image 3" 
+                 onload="this.nextElementSibling.innerHTML = '<span class=success>✓ Loaded successfully</span>'"
+                 onerror="this.nextElementSibling.innerHTML = '<span class=error>✗ Failed to load</span>'">
+            <div>21172-G50.jpg</div>
+        </div>
+        
+        <div class="image-test">
+            <img src="/server/images.php?img=1836_Pyramide.jpg" 
+                 alt="Test Image 4" 
+                 onload="this.nextElementSibling.innerHTML = '<span class=success>✓ Loaded successfully</span>'"
+                 onerror="this.nextElementSibling.innerHTML = '<span class=error>✗ Failed to load</span>'">
+            <div>1836_Pyramide.jpg</div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 2: Non-existent Image</h2>
+        <p>Testing with a filename that doesn't exist:</p>
+        
+        <div class="image-test">
+            <img src="/server/images.php?img=nonexistent.jpg" 
+                 alt="Non-existent Image" 
+                 onload="this.nextElementSibling.innerHTML = '<span class=error>✗ Should not load</span>'"
+                 onerror="this.nextElementSibling.innerHTML = '<span class=success>✓ Correctly failed (404)</span>'">
+            <div>nonexistent.jpg</div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 3: Frontend getImageUrl Function Test</h2>
+        <p>Testing the updated getImageUrl function with various inputs:</p>
+        <div id="function-test-results"></div>
+    </div>
+    
+    <script>
+        // Test the getImageUrl function logic (simulated)
+        function testGetImageUrl(path) {
+            if (!path) {
+                return '/images/placeholder-product.jpg';
+            }
+            
+            if (path.match(/^(https?:|data:|\/\/)/i) || path.startsWith('blob:')) {
+                return path;
+            }
+            
+            if (path.startsWith('/images/') || path.startsWith('/assets/')) {
+                return path;
+            }
+            
+            let filename = path;
+            if (path.includes('/')) {
+                filename = path.split('/').pop();
+            }
+            if (path.includes('\\')) {
+                filename = path.split('\\').pop();
+            }
+            
+            filename = decodeURIComponent(filename);
+            
+            if (!filename || !filename.includes('.')) {
+                return '/images/placeholder-product.jpg';
+            }
+            
+            return `/server/images.php?img=${encodeURIComponent(filename)}`;
+        }
+        
+        // Test cases
+        const testCases = [
+            'Tea Catalogue/22762/22762.jpg',
+            'server/Tea Catalogue/22762/21172.jpg',
+            '22762.jpg',
+            '/assets/some-image.jpg',
+            'http://example.com/image.jpg',
+            '',
+            null,
+            'invalid-path-no-extension'
+        ];
+        
+        const resultsDiv = document.getElementById('function-test-results');
+        testCases.forEach(testCase => {
+            const result = testGetImageUrl(testCase);
+            const div = document.createElement('div');
+            div.innerHTML = `
+                <strong>Input:</strong> ${testCase || 'null'}<br>
+                <strong>Output:</strong> ${result}<br><br>
+            `;
+            resultsDiv.appendChild(div);
+        });
+    </script>
+</body>
+</html>

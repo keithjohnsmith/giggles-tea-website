@@ -1,8 +1,59 @@
-// Import config
-import config from '../config';
+// Import config and helper utilities
+import config, { getImageUrl } from '../config';
 
 // Get the api object with getApiUrl method
 const { api } = config;
+
+// Helper to determine if backend response indicates success (supports both legacy and new formats)
+
+// Helper to transform a raw backend product into the shape the React UI expects
+const transformProduct = (product) => {
+  if (!product || typeof product !== 'object') return {};
+
+  // Extract first category names for convenience
+  let category_en = '';
+  let category_de = '';
+  if (Array.isArray(product.categories) && product.categories.length > 0) {
+    category_en = product.categories[0].name_en || '';
+    category_de = product.categories[0].name_de || '';
+  }
+  // Fallback to direct category fields if categories array is absent or empty
+  if (!category_en && (product.category_en || product.category)) {
+    category_en = product.category_en || product.category || '';
+  }
+  if (!category_de && (product.category || product.category_de)) {
+    category_de = product.category_de || product.category || '';
+  }
+
+  // Build image list (ensure full URLs)
+  const imagesArr = Array.isArray(product.images) ? product.images.map(getImageUrl) : [];
+  const primaryImage = imagesArr.length > 0 ? imagesArr[0] : (product.image ? getImageUrl(product.image) : '');
+
+  return {
+    id: product.id,
+    code: product.code || product.sku || String(product.id),
+    name: product.name,
+    germanName: product.german_name || product.germanName || '',
+    price: parseFloat(product.price) || 0,
+    displayPrice: product.display_price || undefined,
+    image: primaryImage,
+    images: imagesArr,
+    description: product.description_en || product.description || '',
+    category_en,
+    category_de,
+    category: category_en || category_de || 'Uncategorized',
+    // Provide an explicit alias for components that expect `category_name`
+    category_name: category_en || category_de || 'Uncategorized',
+    categories: Array.isArray(product.categories) ? product.categories : [],
+    category_id: product.category_id || null,
+    hoverImage: imagesArr.length > 1 ? imagesArr[1] : undefined,
+  };
+};
+const isApiSuccess = (res) => {
+  if (!res) return false;
+  if (typeof res.success !== 'undefined') return !!res.success; // newer style boolean flag
+  return res.status === 'success'; // legacy/back-end flag
+};
 
 /**
  * Product Service for interacting with the PHP backend API
@@ -38,24 +89,12 @@ const productService = {
 
           const result = await response.json();
           
-          if (result && result.success && result.data) {
+          if (isApiSuccess(result) && result.data) {
             const { data, pagination } = result.data;
             
             if (Array.isArray(data)) {
               // Transform and add products from this page
-              const products = data.map(product => ({
-                id: product.id,
-                name: product.name,
-                german_name: product.german_name || '',
-                price: parseFloat(product.price) || 0,
-                image: product.image || '',
-                images: Array.isArray(product.images) ? product.images : [],
-                description: product.description || '',
-                category: product.category_en || product.category || 'Uncategorized',
-                categories: Array.isArray(product.categories) ? product.categories : [],
-                category_id: product.category_id || null,
-              }));
-              
+              const products = data.map(transformProduct);
               allProducts = [...allProducts, ...products];
               
               // Check if there are more pages to fetch
@@ -94,22 +133,11 @@ const productService = {
       const result = await response.json();
       
       // Transform the API response to match the frontend's expected format
-      if (result && result.success && result.data) {
+      if (isApiSuccess(result) && result.data) {
         const { data, pagination } = result.data;
         
         return {
-          products: Array.isArray(data) ? data.map(product => ({
-            id: product.id,
-            name: product.name,
-            german_name: product.german_name || '',
-            price: parseFloat(product.price) || 0,
-            image: product.image || '',
-            images: Array.isArray(product.images) ? product.images : [],
-            description: product.description || '',
-            category: product.category_en || product.category || 'Uncategorized',
-            categories: Array.isArray(product.categories) ? product.categories : [],
-            category_id: product.category_id || null,
-          })) : [],
+          products: Array.isArray(data) ? data.map(transformProduct) : [],
           pagination: pagination || {
             total: 0,
             page: 1,
@@ -147,23 +175,12 @@ const productService = {
       const result = await response.json();
       
       // Transform the API response to match the frontend's expected format
-      if (result && result.success && result.data) {
+      if (isApiSuccess(result) && result.data) {
         let productData = result.data.data || result.data;
         const product = Array.isArray(productData) ? productData[0] : productData;
         if (!product) return null;
         
-        return {
-          id: product.id,
-          name: product.name,
-          german_name: product.german_name || '',
-          price: parseFloat(product.price) || 0,
-          image: product.image || '',
-          images: Array.isArray(product.images) ? product.images : [],
-          description: product.description || '',
-          category: product.category_en || product.category || 'Uncategorized',
-          categories: Array.isArray(product.categories) ? product.categories : [],
-          category_id: product.category_id || null,
-        };
+        return transformProduct(product);
       }
       
       console.error('Product not found or invalid response format:', result);
@@ -194,19 +211,8 @@ const productService = {
       const result = await response.json();
       
       // If we have featured products, return them, otherwise get the first 8 products
-      if (result && result.success && result.data && Array.isArray(result.data.data) && result.data.data.length > 0) {
-        return result.data.data.slice(0, 8).map(product => ({
-          id: product.id,
-          name: product.name,
-          german_name: product.german_name || '',
-          price: parseFloat(product.price) || 0,
-          image: product.image || '',
-          images: Array.isArray(product.images) ? product.images : [],
-          description: product.description || '',
-          category: product.category_en || product.category || 'Uncategorized',
-          categories: Array.isArray(product.categories) ? product.categories : [],
-          category_id: product.category_id || null,
-        }));
+      if (isApiSuccess(result) && result.data && Array.isArray(result.data.data) && result.data.data.length > 0) {
+        return result.data.data.slice(0, 8).map(transformProduct);
       }
       
       // Fallback to getting all products if no featured products found

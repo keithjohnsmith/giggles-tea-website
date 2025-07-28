@@ -45,6 +45,15 @@ const fetchOptions = (method = 'GET', body = null, token = null) => {
   return options;
 };
 
+// Utility to determine if backend response indicates success (supports both legacy and new formats)
+const isApiSuccess = (res) => {
+  if (!res) return false;
+  if (typeof res.success !== 'undefined') {
+    return !!res.success; // newer boolean success flag
+  }
+  return res.status === 'success'; // Response::json wrapper
+};
+
 // Helper function to handle responses
 const handleResponse = async (response) => {
   console.log('Response status:', response.status);
@@ -196,13 +205,21 @@ const fetchProductsPage = async (page = 1, limit = 10) => {
       getApiUrl('products', { page, limit }),
       fetchOptions()
     );
-    const data = await handleResponse(response);
+    const result = await handleResponse(response);
+    let productsRaw = [];
+    if (isApiSuccess(result) && result.data) {
+      if (Array.isArray(result.data)) {
+        productsRaw = result.data;
+      } else if (Array.isArray(result.data.data)) {
+        productsRaw = result.data.data;
+      }
+    }
     return {
-      products: Array.isArray(data.data) ? data.data.map(transformProduct) : [],
-      pages: Number(data.pages) || 1,
-      page: Number(data.page) || 1,
-      total: Number(data.total) || 0,
-      limit: Number(data.limit) || limit
+      products: productsRaw.map(transformProduct),
+      pages: Number(result.pages ?? result.data?.pages ?? 1),
+      page: Number(result.page ?? result.data?.page ?? 1),
+      total: Number(result.total ?? result.data?.total ?? 0),
+      limit: Number(result.limit ?? result.data?.limit ?? limit)
     };
   } catch (error) {
     console.error('Error fetching products page:', error);
@@ -237,13 +254,22 @@ export const productService = {
       
       const result = await handleResponse(response);
       
-      if (result && result.success && Array.isArray(result.data)) {
-        return result.data.map(transformProduct);
+      let productsRaw = [];
+
+      if (isApiSuccess(result) && result.data) {
+        if (Array.isArray(result.data)) {
+          // Direct array format
+          productsRaw = result.data;
+        } else if (Array.isArray(result.data.data)) {
+          // Wrapped in { data: [...] }
+          productsRaw = result.data.data;
+        }
       } else if (Array.isArray(result)) {
-        return result.map(transformProduct);
+        // Legacy endpoints may return the array directly
+        productsRaw = result;
       }
-      
-      return [];
+
+      return productsRaw.map(transformProduct);
     } catch (error) {
       console.error('Error fetching products:', error);
       throw error;

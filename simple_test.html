@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4F46E5;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Simple API Test</h1>
+    <button id="fetchBtn">Fetch Products</button>
+    <div id="status"></div>
+    <pre id="output"></pre>
+
+    <script>
+        document.getElementById('fetchBtn').addEventListener('click', fetchProducts);
+
+        async function fetchProducts() {
+            const statusEl = document.getElementById('status');
+            const outputEl = document.getElementById('output');
+            
+            statusEl.textContent = 'Loading...';
+            
+            try {
+                const response = await fetch('http://localhost/giggles-tea/api/products');
+                const data = await response.json();
+                
+                // Display the raw API response
+                outputEl.textContent = JSON.stringify(data, null, 2);
+                
+                // Show status
+                if (data.success) {
+                    statusEl.textContent = `Success! Found ${data.data?.data?.length || 0} products`;
+                } else {
+                    statusEl.textContent = `Error: ${data.error || 'Unknown error'}`;
+                }
+            } catch (error) {
+                outputEl.textContent = `Error: ${error.message}`;
+                statusEl.textContent = 'Failed to fetch data';
+            }
+        }
+    </script>
+</body>
+</html>

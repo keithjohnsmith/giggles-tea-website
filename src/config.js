@@ -10,7 +10,8 @@ export const config = {
     
     // API endpoints - these are relative to baseUrl
     endpoints: {
-      products: 'products',
+      // Updated to include .php extension for correct backend script
+      products: 'products.php',
       products_fixed: 'products_fixed',
       products_simple: 'products_simple',
       // Add other API endpoints here as needed
@@ -161,46 +162,52 @@ export const getApiUrl = (endpoint, params = {}) => {
 };
 
 /**
- * Get the full URL for an image with robust path handling
- * @param {string} path - The image path from the database
- * @returns {string} Full image URL
+ * Get the full URL for an image using the PHP image proxy
+ * @param {string} path - The image path or filename
+ * @returns {string} Full image URL using the proxy
  */
 export const getImageUrl = (path) => {
-  if (!path) return '';
+  if (!path) {
+    console.warn('getImageUrl called with empty path');
+    return '/images/placeholder-product.jpg'; // Return placeholder instead of empty string
+  }
   
   // If it's already a full URL or data URI, return as is
   if (path.match(/^(https?:|data:|\/\/)/i) || path.startsWith('blob:')) {
     return path;
   }
   
-  // Normalize the path - handle both forward and backslashes
-  let normalizedPath = path.replace(/\\/g, '/');
-  
-  // Decode any URL-encoded characters (like %20 for spaces)
-  try {
-    normalizedPath = decodeURIComponent(normalizedPath);
-  } catch (e) {
-    console.warn('Error decoding image path:', e);
+  // If it's already a placeholder or asset path, return as is
+  if (path.startsWith('/images/') || path.startsWith('/assets/')) {
+    return path;
   }
   
-  // Remove any leading slashes or dots to prevent path traversal
-  normalizedPath = normalizedPath.replace(/^[\/\.]+/, '');
+  // Extract just the filename from any path structure
+  let filename = path;
   
-  // Remove any 'Tea Catalogue' or 'Tea%20Catalogue' from the path to prevent duplication
-  normalizedPath = normalizedPath.replace(/^tea\s*catalogue\//i, '');
+  // Handle various path formats and extract the filename
+  if (path.includes('/')) {
+    filename = path.split('/').pop(); // Get the last part after the last slash
+  }
+  if (path.includes('\\')) {
+    filename = path.split('\\').pop(); // Handle backslashes
+  }
   
-  // Split the path into parts
-  const parts = normalizedPath.split('/').filter(Boolean);
+  // Remove any URL encoding from the filename
+  filename = decodeURIComponent(filename);
   
-  // If the first part is a number, assume it's a product ID
-  if (parts.length > 0 && /^\d+$/.test(parts[0])) {
-    const productId = parts[0];
-    const filename = parts.slice(1).join('/');
-    return `/image.php?path=${encodeURIComponent(`${productId}/${filename}`)}`;
-  } 
+  // Validate that we have a filename with an extension
+  if (!filename || !filename.includes('.')) {
+    console.warn('Invalid filename extracted from path:', path);
+    return '/images/placeholder-product.jpg';
+  }
   
-  // Otherwise, use the path as is
-  return `/image.php?path=${encodeURIComponent(normalizedPath)}`;
+  // Use the PHP image proxy to serve the image
+  // The proxy will search all subdirectories for the filename
+  const proxyUrl = `/server/images.php?img=${encodeURIComponent(filename)}`;
+  
+  console.log('Image proxy URL:', proxyUrl, 'for original path:', path);
+  return proxyUrl;
 };
 
 export default config;

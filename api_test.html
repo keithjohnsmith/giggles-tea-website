@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giggles Tea API Test</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9fafb;
+            color: #374151;
+        }
+        h1, h2 {
+            color: #111827;
+        }
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .button {
+            background-color: #4f46e5;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        .button:hover {
+            background-color: #4338ca;
+        }
+        pre {
+            background-color: #f3f4f6;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(79, 70, 229, 0.3);
+            border-radius: 50%;
+            border-top-color: #4f46e5;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        input[type="text"] {
+            padding: 8px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            width: 100%;
+            max-width: 400px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <h1>Giggles Tea API Test</h1>
+    
+    <div class="card">
+        <h2>API Configuration</h2>
+        <div class="input-group">
+            <label for="baseUrl">Base URL:</label>
+            <input type="text" id="baseUrl" value="http://localhost/giggles-tea/api" />
+        </div>
+        <div class="input-group">
+            <label for="endpoint">Endpoint:</label>
+            <input type="text" id="endpoint" value="products" />
+        </div>
+    </div>
+    
+    <div class="card">
+        <h2>Test Endpoints</h2>
+        <button class="button" id="testDirectAccess">Test Direct Access (.php)</button>
+        <button class="button" id="testRouterAccess">Test Router Access (no .php)</button>
+        <button class="button" id="testWithId">Test With ID (id=1)</button>
+        <button class="button" id="testFeatured">Test Featured Products</button>
+    </div>
+    
+    <div class="card">
+        <h2>Response</h2>
+        <div id="loading" style="display: none;">
+            <span class="loading"></span> Loading...
+        </div>
+        <pre id="response">Click a button above to test the API</pre>
+    </div>
+    
+    <script>
+        // Elements
+        const baseUrlEl = document.getElementById('baseUrl');
+        const endpointEl = document.getElementById('endpoint');
+        const responseEl = document.getElementById('response');
+        const loadingEl = document.getElementById('loading');
+        
+        // Event listeners
+        document.getElementById('testDirectAccess').addEventListener('click', () => {
+            const url = `${baseUrlEl.value}/${endpointEl.value}.php`;
+            fetchData(url);
+        });
+        
+        document.getElementById('testRouterAccess').addEventListener('click', () => {
+            const url = `${baseUrlEl.value}/${endpointEl.value}`;
+            fetchData(url);
+        });
+        
+        document.getElementById('testWithId').addEventListener('click', () => {
+            const url = `${baseUrlEl.value}/${endpointEl.value}?id=1`;
+            fetchData(url);
+        });
+        
+        document.getElementById('testFeatured').addEventListener('click', () => {
+            const url = `${baseUrlEl.value}/${endpointEl.value}?featured=true`;
+            fetchData(url);
+        });
+        
+        // Fetch data from API
+        async function fetchData(url) {
+            showLoading();
+            
+            try {
+                console.log(`Fetching: ${url}`);
+                responseEl.textContent = `Fetching: ${url}`;
+                
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include'
+                });
+                
+                const contentType = response.headers.get('content-type');
+                let data;
+                
+                if (contentType && contentType.includes('application/json')) {
+                    data = await response.json();
+                } else {
+                    const text = await response.text();
+                    data = { 
+                        text,
+                        _note: 'Response was not JSON. Showing raw text.'
+                    };
+                }
+                
+                displayResponse({
+                    url,
+                    status: response.status,
+                    statusText: response.statusText,
+                    headers: Object.fromEntries([...response.headers]),
+                    data
+                });
+                
+            } catch (error) {
+                displayResponse({ 
+                    url,
+                    error: error.message,
+                    stack: error.stack
+                });
+            } finally {
+                hideLoading();
+            }
+        }
+        
+        // Display response
+        function displayResponse(data) {
+            responseEl.textContent = JSON.stringify(data, null, 2);
+        }
+        
+        // Show loading
+        function showLoading() {
+            loadingEl.style.display = 'block';
+        }
+        
+        // Hide loading
+        function hideLoading() {
+            loadingEl.style.display = 'none';
+        }
+    </script>
+</body>
+</html>

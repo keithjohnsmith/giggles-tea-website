@@ -4,14 +4,17 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Force PHP to send headers immediately
+// Start output buffering to capture all output
 ob_start();
+
+// Increase memory limit to handle larger responses
+ini_set('memory_limit', '256M');
+
+// Set execution time limit to avoid timeouts
+set_time_limit(120);
 
 // CORS headers are now handled by Apache in .htaccess
 // Do not set any CORS headers here to avoid duplication
-
-// Ensure headers are sent even if script execution is interrupted
-ob_flush();
 
 /* 
 // For production, use specific origins instead of wildcard:
@@ -148,31 +151,56 @@ foreach ($routes as $pattern => $file) {
 
 // Include the handler file if found
 if ($handler) {
-    // Check if the handler is a full path (like '../image.php')
-    if (strpos($handler, '../') === 0) {
-        $handlerPath = dirname(__DIR__) . '/' . substr($handler, 3);
-        if (file_exists($handlerPath)) {
+    try {
+        // Check if the handler is a full path (like '../image.php')
+        if (strpos($handler, '../') === 0) {
+            $handlerPath = dirname(__DIR__) . '/' . substr($handler, 3);
+            if (file_exists($handlerPath)) {
+                require_once __DIR__ . '/config/database.php';
+                require_once __DIR__ . '/utils/Response.php';
+                
+                // Get request data
+                $requestData = json_decode(file_get_contents('php://input'), true) ?? [];
+                
+                // Capture output from the handler file
+                ob_start();
+                include $handlerPath;
+                $output = ob_get_clean();
+                
+                // Send the output
+                echo $output;
+                exit;
+            }
+        } 
+        // Check if the file exists in the server directory
+        else if (file_exists(__DIR__ . '/' . $handler)) {
             require_once __DIR__ . '/config/database.php';
             require_once __DIR__ . '/utils/Response.php';
             
             // Get request data
             $requestData = json_decode(file_get_contents('php://input'), true) ?? [];
             
-            // Include the handler file
-            include $handlerPath;
+            // Capture output from the handler file
+            ob_start();
+            include __DIR__ . '/' . $handler;
+            $output = ob_get_clean();
+            
+            // Send the output
+            echo $output;
             exit;
         }
-    } 
-    // Check if the file exists in the server directory
-    else if (file_exists(__DIR__ . '/' . $handler)) {
-        require_once __DIR__ . '/config/database.php';
-        require_once __DIR__ . '/utils/Response.php';
-        
-        // Get request data
-        $requestData = json_decode(file_get_contents('php://input'), true) ?? [];
-        
-        // Include the handler file
-        include __DIR__ . '/' . $handler;
+    } catch (Exception $e) {
+        // Handle exceptions
+        http_response_code(500);
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Server error: ' . $e->getMessage(),
+            'debug' => $debug ? [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ] : null
+        ]);
         exit;
     }
 } else {

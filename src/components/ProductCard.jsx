@@ -33,55 +33,29 @@ const SamplePrevArrow = (props) => {
 // Default box of tea image path - using the existing placeholder image
 const DEFAULT_TEA_BOX_IMAGE = '/images/placeholder-product.jpg';
 
+// Import the getImageUrl function from config
+import { getImageUrl } from '../config.js';
+
 // Process image paths to handle different sources
 const processImageUrl = (imagePath) => {
   try {
     // If no image path is provided, return the default tea box image
     if (!imagePath) return DEFAULT_TEA_BOX_IMAGE;
     
-    // If it's already a full URL or data URL, return as is
-    if (imagePath.startsWith('http') || imagePath.startsWith('data:')) {
+    // If it's already a placeholder or asset path, return as is
+    if (imagePath === DEFAULT_TEA_BOX_IMAGE || imagePath.startsWith('/images/') || imagePath.startsWith('/assets/')) {
       return imagePath;
     }
     
-    // Handle paths that are already absolute URLs from the backend
-    if (imagePath.startsWith('http://localhost:8000/')) {
-      return imagePath;
+    // Use the centralized getImageUrl function for all other cases
+    const processedUrl = getImageUrl(imagePath);
+    
+    // If getImageUrl returns a placeholder, use our default instead
+    if (processedUrl === '/images/placeholder-product.jpg') {
+      return DEFAULT_TEA_BOX_IMAGE;
     }
     
-    // If the URL is already in the correct format from the backend, return it
-    if (imagePath.includes('Tea%20Catalogue/')) {
-      return `http://localhost:8000${imagePath.startsWith('/') ? '' : '/'}${imagePath}`;
-    }
-    
-    // Handle paths starting with /src/assets/ (common in development)
-    if (imagePath.startsWith('/src/assets/')) {
-      const filename = imagePath.split('/').pop();
-      return `/assets/${filename}`;
-    }
-    
-    // Handle paths starting with /assets/
-    if (imagePath.startsWith('/assets/')) {
-      return imagePath;
-    }
-    
-    // Handle paths starting with Tea Catalogue/ or /Tea%20Catalogue/
-    if (imagePath.includes('Tea Catalogue/') || imagePath.includes('Tea%20Catalogue/')) {
-      // If it's already a full path, return as is
-      if (imagePath.startsWith('http')) {
-        return imagePath;
-      }
-      // Otherwise, construct the full URL to the backend
-      return `http://localhost:8000/server/Tea%20Catalogue/${imagePath.replace(/^.*[\\\/]/, '')}`.replace(/\\/g, '/');
-    }
-    
-    // If the path is already absolute (starts with /), return as is
-    if (imagePath.startsWith('/')) {
-      return `http://localhost:8000${imagePath}`;
-    }
-    
-    // For any other case, assume it's a path relative to the public directory
-    return `http://localhost:8000/${imagePath}`.replace(/\\/g, '/');
+    return processedUrl;
     
   } catch (e) {
     console.warn(`Error processing image path: ${imagePath}`, e);
